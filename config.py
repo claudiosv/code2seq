@@ -5,15 +5,15 @@ class Config:
         config.NUM_EPOCHS = 3  # 3000
         config.SAVE_EVERY_EPOCHS = 1
         config.PATIENCE = 10
-        config.BATCH_SIZE = 8  # 512
-        config.TEST_BATCH_SIZE = 256
+        config.BATCH_SIZE = 64  # 512
+        config.TEST_BATCH_SIZE = 32  # 256
         config.READER_NUM_PARALLEL_BATCHES = 1
         config.SHUFFLE_BUFFER_SIZE = 10000
         config.CSV_BUFFER_SIZE = 100 * 1024 * 1024  # 100 MB
         config.MAX_CONTEXTS = 30
         # 200  # the number of sampled paths from each example (which we set to 200 in the final models).
-        config.SUBTOKENS_VOCAB_MAX_SIZE = 190000
-        config.TARGET_VOCAB_MAX_SIZE = 27000
+        config.SUBTOKENS_VOCAB_MAX_SIZE = 1000  # 190000
+        config.TARGET_VOCAB_MAX_SIZE = 1500  # 27000
         config.EMBEDDINGS_SIZE = 64  # 128  # dtokens = dnodes = dhidden = dtarget = 128
         config.RNN_SIZE = 64  # 128 * 2  # Two LSTMs to embed paths, each of size 128
         config.DECODER_SIZE = 160  # 320
@@ -24,7 +24,7 @@ class Config:
         config.EMBEDDINGS_DROPOUT_KEEP_PROB = 0.75  # dropout 0.25
         config.RNN_DROPOUT_KEEP_PROB = 0.5
         # recurrent dropout of 0.5 on the LSTM that encodes the AST paths.
-        config.BIRNN = True
+        config.BIRNN = False
         config.GRU = False
         config.RANDOM_CONTEXTS = True
         config.BEAM_WIDTH = 0

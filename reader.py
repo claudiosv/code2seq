@@ -32,6 +32,7 @@ class Reader:
         config,
         is_evaluating=False,
     ):
+        tf.logging.set_verbosity(tf.logging.ERROR)
         self.config = config
         self.file_path = (
             config.TEST_PATH if is_evaluating else (config.TRAIN_PATH + ".train.c2s")
@@ -84,8 +85,8 @@ class Reader:
 
     @classmethod
     def initialize_hash_map(cls, word_to_index, default_value):
-        return tf.contrib.lookup.HashTable(
-            tf.contrib.lookup.KeyValueTensorInitializer(
+        return tf.contrib.lookup.HashTable(  # TODO: Refactor tf.contrib
+            tf.contrib.lookup.KeyValueTensorInitializer(  # TODO: Refactor tf.contrib
                 list(word_to_index.keys()),
                 list(word_to_index.values()),
                 key_dtype=tf.string,
@@ -144,7 +145,8 @@ class Reader:
         target_dense_shape = [
             1,
             tf.maximum(
-                tf.to_int64(self.config.MAX_TARGET_PARTS),
+                tf.cast(self.config.MAX_TARGET_PARTS, tf.int64),
+                #                tf.to_int64(self.config.MAX_TARGET_PARTS),
                 split_target_labels.dense_shape[1] + 1,
             ),
         ]
@@ -249,13 +251,14 @@ class Reader:
             tf.cast(tf.not_equal(dense_split_target, Common.PAD), tf.int32), -1
         )  # (max_contexts)
 
-        valid_contexts_mask = tf.to_float(
+        valid_contexts_mask = tf.cast(  # tf.to_float
             tf.not_equal(
                 tf.reduce_max(path_source_indices, -1)
                 + tf.reduce_max(node_indices, -1)
                 + tf.reduce_max(path_target_indices, -1),
                 0,
-            )
+            ),
+            dtype=tf.float32,
         )
 
         return {
@@ -302,7 +305,9 @@ class Reader:
                 num_parallel_batches=self.config.READER_NUM_PARALLEL_BATCHES,
             )
         )
-        dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)
+        dataset = dataset.prefetch(
+            tf.contrib.data.AUTOTUNE
+        )  # TODO: Refactor tf.contrib
         self.iterator = dataset.make_initializable_iterator()
         self.reset_op = self.iterator.initializer
         return self.iterator.get_next()

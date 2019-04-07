@@ -3,8 +3,10 @@ from argparse import ArgumentParser
 from config import Config
 from interactive_predict import InteractivePredictor
 from model import Model
+import os
 
 if __name__ == "__main__":
+    os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
     parser = ArgumentParser()
     parser.add_argument(
         "-d",
