@@ -24,9 +24,9 @@
 TRAIN_DIR=my_training_dir
 VAL_DIR=my_val_dir
 TEST_DIR=my_test_dir
-DATASET_NAME=my_dataset
-MAX_DATA_CONTEXTS=1000
-MAX_CONTEXTS=200 #the number of sampled paths from each example (which we set to 200 in the final models).
+DATASET_NAME=java-pico
+MAX_DATA_CONTEXTS=50
+MAX_CONTEXTS=10 #the number of sampled paths from each example (which we set to 200 in the final models).
 SUBTOKEN_VOCAB_SIZE=186277
 TARGET_VOCAB_SIZE=26347
 NUM_THREADS=64

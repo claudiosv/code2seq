@@ -2,31 +2,30 @@ class Config:
     @staticmethod
     def get_default_config(args):
         config = Config(args)
-        config.NUM_EPOCHS = 3000
+        config.NUM_EPOCHS = 3  # 3000
         config.SAVE_EVERY_EPOCHS = 1
         config.PATIENCE = 10
-        config.BATCH_SIZE = 512
+        config.BATCH_SIZE = 8  # 512
         config.TEST_BATCH_SIZE = 256
         config.READER_NUM_PARALLEL_BATCHES = 1
         config.SHUFFLE_BUFFER_SIZE = 10000
         config.CSV_BUFFER_SIZE = 100 * 1024 * 1024  # 100 MB
-        config.MAX_CONTEXTS = (
-            200
-        )  # the number of sampled paths from each example (which we set to 200 in the final models).
+        config.MAX_CONTEXTS = 30
+        # 200  # the number of sampled paths from each example (which we set to 200 in the final models).
         config.SUBTOKENS_VOCAB_MAX_SIZE = 190000
         config.TARGET_VOCAB_MAX_SIZE = 27000
-        config.EMBEDDINGS_SIZE = 128  # dtokens = dnodes = dhidden = dtarget = 128
-        config.RNN_SIZE = 128 * 2  # Two LSTMs to embed paths, each of size 128
-        config.DECODER_SIZE = 320
+        config.EMBEDDINGS_SIZE = 64  # 128  # dtokens = dnodes = dhidden = dtarget = 128
+        config.RNN_SIZE = 64  # 128 * 2  # Two LSTMs to embed paths, each of size 128
+        config.DECODER_SIZE = 160  # 320
         config.NUM_DECODER_LAYERS = 1
         config.MAX_PATH_LENGTH = 8 + 1
         config.MAX_NAME_PARTS = 5
         config.MAX_TARGET_PARTS = 6
         config.EMBEDDINGS_DROPOUT_KEEP_PROB = 0.75  # dropout 0.25
-        config.RNN_DROPOUT_KEEP_PROB = (
-            0.5
-        )  # recurrent dropout of 0.5 on the LSTM that encodes the AST paths.
+        config.RNN_DROPOUT_KEEP_PROB = 0.5
+        # recurrent dropout of 0.5 on the LSTM that encodes the AST paths.
         config.BIRNN = True
+        config.GRU = False
         config.RANDOM_CONTEXTS = True
         config.BEAM_WIDTH = 0
         config.USE_MOMENTUM = True
@@ -38,6 +37,8 @@ class Config:
         self.DECODER_SIZE = otherConfig.DECODER_SIZE
         self.NUM_DECODER_LAYERS = otherConfig.NUM_DECODER_LAYERS
         self.BIRNN = otherConfig.BIRNN
+        self.GRU = otherConfig.GRU
+
         if self.DATA_NUM_CONTEXTS <= 0:
             self.DATA_NUM_CONTEXTS = otherConfig.DATA_NUM_CONTEXTS
 
@@ -68,6 +69,7 @@ class Config:
         self.EMBEDDINGS_DROPOUT_KEEP_PROB = 0
         self.RNN_DROPOUT_KEEP_PROB = 0
         self.BIRNN = False
+        self.GRU = False
         self.RANDOM_CONTEXTS = True
         self.BEAM_WIDTH = 1
         self.USE_MOMENTUM = True
@@ -97,6 +99,7 @@ class Config:
         config.EMBEDDINGS_DROPOUT_KEEP_PROB = 1
         config.RNN_DROPOUT_KEEP_PROB = 1
         config.BIRNN = True
+        config.GRU = False
         config.RANDOM_CONTEXTS = True
         config.BEAM_WIDTH = 0
         config.USE_MOMENTUM = False

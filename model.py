@@ -120,6 +120,7 @@ class Model:
             1, (self.config.NUM_EPOCHS // self.config.SAVE_EVERY_EPOCHS) + 1
         ):
             self.queue_thread.reset(self.sess)
+            print("Starting new epoch (?)")
             try:
                 while True:
                     print("Trained %d batches" % batch_num)
@@ -458,7 +459,7 @@ class Model:
                 dtype=tf.float32,
                 initializer=tf.contrib.layers.variance_scaling_initializer(
                     factor=1.0, mode="FAN_OUT", uniform=True
-                ), #nn.init.kaiming_uniform_(tensor, mode='fan_out', nonlinearity='relu')
+                ),  # nn.init.kaiming_uniform_(tensor, mode='fan_out', nonlinearity='relu')
             )
             nodes_vocab = tf.get_variable(
                 "NODES_VOCAB",
@@ -544,22 +545,36 @@ class Model:
         start_fill = tf.fill(
             [batch_size], self.target_to_index[Common.SOS]
         )  # (batch, )
-        decoder_cell = tf.nn.rnn_cell.MultiRNNCell(
-            [
-                tf.nn.rnn_cell.LSTMCell(self.config.DECODER_SIZE)
-                for _ in range(self.config.NUM_DECODER_LAYERS)
-            ]
-        )
+        if self.config.GRU:
+            decoder_cell = tf.nn.rnn_cell.MultiRNNCell(
+                [
+                    tf.nn.rnn_cell.GRUCell(self.config.DECODER_SIZE)
+                    for _ in range(self.config.NUM_DECODER_LAYERS)
+                ]
+            )
+        else:
+            decoder_cell = tf.nn.rnn_cell.MultiRNNCell(
+                [
+                    tf.nn.rnn_cell.LSTMCell(self.config.DECODER_SIZE) #tf.keras.layers.GRUCell
+                    for _ in range(self.config.NUM_DECODER_LAYERS)
+                ]
+            )
         contexts_sum = tf.reduce_sum(
             batched_contexts * tf.expand_dims(valid_mask, -1), axis=1
         )  # (batch_size, dim * 2 + rnn_size)
         contexts_average = tf.divide(
             contexts_sum, tf.to_float(tf.expand_dims(num_contexts_per_example, -1))
         )
-        fake_encoder_state = tuple(
-            tf.nn.rnn_cell.LSTMStateTuple(contexts_average, contexts_average)
-            for _ in range(self.config.NUM_DECODER_LAYERS)
-        )
+        if self.config.GRU:
+            fake_encoder_state = tf.constant(
+                contexts_average
+                for _ in range(self.config.NUM_DECODER_LAYERS)
+            )
+        else:
+            fake_encoder_state = tuple(
+                tf.nn.rnn_cell.LSTMStateTuple(contexts_average, contexts_average)
+                for _ in range(self.config.NUM_DECODER_LAYERS)
+            )
         projection_layer = tf.layers.Dense(self.target_vocab_size, use_bias=False)
         if is_evaluating and self.config.BEAM_WIDTH > 0:
             batched_contexts = tf.contrib.seq2seq.tile_batch(
@@ -667,38 +682,73 @@ class Model:
             tf.reshape(path_lengths, [-1]), tf.cast(flat_valid_contexts_mask, tf.int32)
         )  # (batch * max_contexts)
         if self.config.BIRNN:
-            rnn_cell_fw = tf.nn.rnn_cell.LSTMCell(self.config.RNN_SIZE / 2)
-            rnn_cell_bw = tf.nn.rnn_cell.LSTMCell(self.config.RNN_SIZE / 2)
-            if not is_evaluating:
-                rnn_cell_fw = tf.nn.rnn_cell.DropoutWrapper(
-                    rnn_cell_fw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+            if self.config.GRU:
+                rnn_cell_fw = tf.nn.rnn_cell.GRUCell(self.config.RNN_SIZE / 2) # tf.keras.layers.GRUCell
+                rnn_cell_bw = tf.nn.rnn_cell.GRUCell(self.config.RNN_SIZE / 2) # tf.keras.layers.GRUCell
+                if not is_evaluating:
+                    rnn_cell_fw = tf.nn.rnn_cell.DropoutWrapper(
+                        rnn_cell_fw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+                    )
+                    rnn_cell_bw = tf.nn.rnn_cell.DropoutWrapper(
+                        rnn_cell_bw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+                    )
+                _, (state_fw, state_bw) = tf.nn.bidirectional_dynamic_rnn(
+                    cell_fw=rnn_cell_fw,
+                    cell_bw=rnn_cell_bw,
+                    inputs=flat_paths,
+                    dtype=tf.float32,
+                    sequence_length=lengths,
                 )
-                rnn_cell_bw = tf.nn.rnn_cell.DropoutWrapper(
-                    rnn_cell_bw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+                final_rnn_state = tf.concat(
+                    [state_fw.h, state_bw.h], axis=-1
+                )  # (batch * max_contexts, rnn_size)
+            else:
+                rnn_cell_fw = tf.nn.rnn_cell.LSTMCell(self.config.RNN_SIZE / 2) #tf.keras.layers.GRUCell
+                rnn_cell_bw = tf.nn.rnn_cell.LSTMCell(self.config.RNN_SIZE / 2) #tf.keras.layers.GRUCell
+                if not is_evaluating:
+                    rnn_cell_fw = tf.nn.rnn_cell.DropoutWrapper(
+                        rnn_cell_fw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+                    )
+                    rnn_cell_bw = tf.nn.rnn_cell.DropoutWrapper(
+                        rnn_cell_bw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+                    )
+                _, (state_fw, state_bw) = tf.nn.bidirectional_dynamic_rnn(
+                    cell_fw=rnn_cell_fw,
+                    cell_bw=rnn_cell_bw,
+                    inputs=flat_paths,
+                    dtype=tf.float32,
+                    sequence_length=lengths,
                 )
-            _, (state_fw, state_bw) = tf.nn.bidirectional_dynamic_rnn(
-                cell_fw=rnn_cell_fw,
-                cell_bw=rnn_cell_bw,
-                inputs=flat_paths,
-                dtype=tf.float32,
-                sequence_length=lengths,
-            )
-            final_rnn_state = tf.concat(
-                [state_fw.h, state_bw.h], axis=-1
-            )  # (batch * max_contexts, rnn_size)
+                final_rnn_state = tf.concat(
+                    [state_fw.h, state_bw.h], axis=-1
+                )  # (batch * max_contexts, rnn_size)
         else:
-            rnn_cell = tf.nn.rnn_cell.LSTMCell(self.config.RNN_SIZE)
-            if not is_evaluating:
-                rnn_cell = tf.nn.rnn_cell.DropoutWrapper(
-                    rnn_cell, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+            if self.config.GRU:
+                gru_cell = tf.nn.rnn_cell.GRUCell(self.config.RNN_SIZE)
+                if not is_evaluating:
+                    gru_cell = tf.nn.rnn_cell.DropoutWrapper(
+                        gru_cell, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+                    )
+                _, state = tf.nn.dynamic_rnn(
+                    cell=gru_cell,
+                    inputs=flat_paths,
+                    dtype=tf.float32,
+                    sequence_length=lengths,
                 )
-            _, state = tf.nn.dynamic_rnn(
-                cell=rnn_cell,
-                inputs=flat_paths,
-                dtype=tf.float32,
-                sequence_length=lengths,
-            )
-            final_rnn_state = state.h  # (batch * max_contexts, rnn_size)
+                final_rnn_state = state.h  # (batch * max_contexts, rnn_size)
+            else:
+                rnn_cell = tf.nn.rnn_cell.LSTMCell(self.config.RNN_SIZE) #tf.keras.layers.GRUCell
+                if not is_evaluating:
+                    rnn_cell = tf.nn.rnn_cell.DropoutWrapper(
+                        rnn_cell, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
+                    )
+                _, state = tf.nn.dynamic_rnn(
+                    cell=rnn_cell,
+                    inputs=flat_paths,
+                    dtype=tf.float32,
+                    sequence_length=lengths,
+                )
+                final_rnn_state = state.h  # (batch * max_contexts, rnn_size)
 
         return tf.reshape(
             final_rnn_state, shape=[-1, max_contexts, self.config.RNN_SIZE]
