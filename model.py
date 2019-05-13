@@ -307,24 +307,24 @@ class Model:
                 batch_size
             )
 
-            # if self.config.USE_MOMENTUM:
-            learning_rate = tf.train.exponential_decay(  # TensorFlow
-                0.01,
-                step * self.config.BATCH_SIZE,
-                self.num_training_examples,
-                0.95,
-                staircase=True,
-            )
-            optimizer = tf.train.MomentumOptimizer(  # TensorFlow
-                learning_rate, 0.95, use_nesterov=True
-            )
-            train_op = optimizer.minimize(loss, global_step=step)
-            # else:
-            #     params = tf.trainable_variables()
-            #     gradients = tf.gradients(loss, params)
-            #     clipped_gradients, _ = tf.clip_by_global_norm(gradients, clip_norm=5)
-            #     optimizer = tf.train.AdamOptimizer()
-            #     train_op = optimizer.apply_gradients(zip(clipped_gradients, params))
+            if self.config.USE_MOMENTUM:
+                learning_rate = tf.train.exponential_decay(  # TensorFlow
+                    0.01,
+                    step * self.config.BATCH_SIZE,
+                    self.num_training_examples,
+                    0.95,
+                    staircase=True,
+                )
+                optimizer = tf.train.MomentumOptimizer(  # TensorFlow
+                    learning_rate, 0.95, use_nesterov=True
+                )
+                train_op = optimizer.minimize(loss, global_step=step)
+            else:
+                params = tf.trainable_variables()
+                gradients = tf.gradients(loss, params)
+                clipped_gradients, _ = tf.clip_by_global_norm(gradients, clip_norm=5)
+                optimizer = tf.train.AdamOptimizer()
+                train_op = optimizer.apply_gradients(zip(clipped_gradients, params))
 
             self.saver = tf.train.Saver(max_to_keep=10)  # TensorFlow
 

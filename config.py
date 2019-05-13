@@ -30,7 +30,7 @@ class Config:
         config.BEAM_WIDTH = 0
         config.USE_MOMENTUM = True
         config.NORM_OR_SCALE = True
-        config.ATTENTION = "bahdanau"  # "bahdanau"
+        config.ATTENTION = "luong"  # "bahdanau"
         return config
 
     def take_model_hyperparams_from(self, otherConfig):
