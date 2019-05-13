@@ -5,7 +5,7 @@
 # test_data: by default, points to the validation set, since this is the set that
 #   will be evaluated after each training iteration. If you wish to test
 #   on the final (held-out) test set, change 'val' to 'test'.
-type=java-pico-model-gru
+type=java-pico-model-gru-bah-norm
 dataset_name=java-pico
 data_dir=data/java-pico
 data=${data_dir}/${dataset_name}

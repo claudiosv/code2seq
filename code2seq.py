@@ -74,5 +74,6 @@ if __name__ == "__main__":
         predictor = InteractivePredictor(config, model)
         predictor.predict()
     if args.release and args.load_path:
+        print("Started in release mode")
         model.evaluate(release=True)
     model.close_session()

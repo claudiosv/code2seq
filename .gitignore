@@ -8,3 +8,5 @@ __pycache__/
 data/
 .DS_Store
 models/
+Seq2seq-PyTorch/env/
+thesis/thesis/

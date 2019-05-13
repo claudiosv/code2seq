@@ -25,10 +25,12 @@ class Config:
         config.RNN_DROPOUT_KEEP_PROB = 0.5
         # recurrent dropout of 0.5 on the LSTM that encodes the AST paths.
         config.BIRNN = False
-        config.GRU = False
+        config.GRU = True
         config.RANDOM_CONTEXTS = True
         config.BEAM_WIDTH = 0
         config.USE_MOMENTUM = True
+        config.NORM_OR_SCALE = True
+        config.ATTENTION = "bahdanau"  # "bahdanau"
         return config
 
     def take_model_hyperparams_from(self, otherConfig):
@@ -69,11 +71,12 @@ class Config:
         self.EMBEDDINGS_DROPOUT_KEEP_PROB = 0
         self.RNN_DROPOUT_KEEP_PROB = 0
         self.BIRNN = False
-        self.GRU = False
+        self.GRU = True
         self.RANDOM_CONTEXTS = True
         self.BEAM_WIDTH = 1
         self.USE_MOMENTUM = True
         self.RELEASE = args.release
+        self.ATTENTION = "luong"
 
     @staticmethod
     def get_debug_config(args):

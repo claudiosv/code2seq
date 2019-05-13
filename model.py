@@ -1,10 +1,16 @@
+# from comet_ml import Experiment
 import _pickle as pickle
 import os
 import time
+import tkinter as tk
 
+# import matplotlib
+# matplotlib.use('TkAgg')
+# import matplotlib.pyplot as plt
 import numpy as np
 import shutil
 import tensorflow as tf
+
 
 import reader
 from common import Common
@@ -13,12 +19,16 @@ from common import Common
 class Model:
     topk = 10
     num_batches_to_log = 100
+    # experiment = Experiment(
+    #     api_key="wRZBv07osQnjYfhIUGphpKpxH", project_name="general", workspace="cspiess"
+    # )
 
     def __init__(self, config):
-        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-        tf.logging.set_verbosity(tf.logging.ERROR)
+        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "0"
+        tf.logging.set_verbosity(tf.logging.INFO)
+        tf.random.set_random_seed(1234)
         self.config = config
-        self.sess = tf.Session()
+        self.sess = tf.Session()  # TensorFlow
 
         self.eval_queue = None
         self.predict_queue = None
@@ -40,6 +50,7 @@ class Model:
 
         if config.LOAD_PATH:
             self.load_model(sess=None)
+            print("No loading")
         else:
             with open("{}.dict.c2s".format(config.TRAIN_PATH), "rb") as file:
                 subtoken_to_count = pickle.load(file)
@@ -77,6 +88,7 @@ class Model:
 
     def train(self):
         print("Starting training")
+
         start_time = time.time()
 
         batch_num = 0
@@ -98,42 +110,69 @@ class Model:
             self.queue_thread.get_output()
         )
 
+        # tf.print([optimizer, train_loss])
+
+        # writer = tf.summary.FileWriter('./graphs', self.sess.graph)
+
         self.print_hyperparams()
 
-        print(
-            "Number of trainable params:",
-            np.sum(
-                [np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]
-            ),
-        )
-
+        # print(
+        #     "Number of trainable params:",
+        #     np.sum(
+        #         [np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]
+        #     ),
+        # )
+        # tvars = tf.trainable_variables()
         self.initialize_session_variables(self.sess)
+        # for var, val in zip(tvars, tvars_vals):
+        #     print(var.name, val)
 
         print("Initalized variables")
-        if self.config.LOAD_PATH:
-            self.load_model(self.sess)
+        # if self.config.LOAD_PATH:
+        #     self.load_model(self.sess)
 
-        time.sleep(1)
+        # time.sleep(1)
         print("Started reader...")
 
         multi_batch_start_time = time.time()
-
-        for _ in range(
+        # self.experiment.log_parameters({"num_epochs": self.config.NUM_EPOCHS, "batch_size": self.config.BATCH_SIZE})
+        for epoch in range(
             1, (self.config.NUM_EPOCHS // self.config.SAVE_EVERY_EPOCHS) + 1
         ):
+            # for epoch in range(self.config.NUM_EPOCHS):
             self.queue_thread.reset(self.sess)
-            print("Starting new epoch (?)")
+            print("Starting new epoch %d" % epoch)
+            # losses = []
+            # plt.plot(losses, '-b', label='Train loss')
+            # plt.plot(batch_num, '-r', label='Batch num')
+            # plt.legend(loc=0)
+            # plt.title('Loss')
+            # plt.xlabel('Iteration')
+            # plt.ylabel('Loss')
             try:
                 while True:
                     # print("Trained %d batches" % batch_num)
                     batch_num += 1
                     if batch_num >= 4600:
+                        print("End of batch!!")
                         raise tf.errors.OutOfRangeError(
                             tf.NodeDef.ExperimentalDebugInfo, None, "I'm fake!"
                         )
                     _, batch_loss = self.sess.run([optimizer, train_loss])
-                    sum_loss += batch_loss
+                    tvars = tf.trainable_variables()
+                    # tvars_vals = sess.run(tvars)
+                    tf.print(tvars)
+                    # for var, val in zip(tvars, x):
+                    #     print(var.name, val)
+                    # self.experiment.log_metric("loss", batch_loss)
+                    # self.experiment.set_step(batch_num)
+                    sum_loss += batch_loss  # aka train loss
+                    # losses.append(batch_loss)
+
                     if batch_num % self.num_batches_to_log == 0:
+                        # plt.show()
+
+                        # plt.savefig('myfilename.png')
                         self.trace(sum_loss, batch_num, multi_batch_start_time)
                         sum_loss = 0
                         multi_batch_start_time = time.time()
@@ -193,252 +232,6 @@ class Model:
             )
         )
 
-    def evaluate(self, release=False):
-        eval_start_time = time.time()
-        if self.eval_queue is None:
-            self.eval_queue = reader.Reader(
-                subtoken_to_index=self.subtoken_to_index,
-                node_to_index=self.node_to_index,
-                target_to_index=self.target_to_index,
-                config=self.config,
-                is_evaluating=True,
-            )
-            reader_output = self.eval_queue.get_output()
-            self.eval_predicted_indices_op, self.eval_topk_values, _, _ = self.build_test_graph(
-                reader_output
-            )
-            self.eval_true_target_strings_op = reader_output[reader.TARGET_STRING_KEY]
-            self.saver = tf.train.Saver(max_to_keep=10)
-
-        if self.config.LOAD_PATH and not self.config.TRAIN_PATH:
-            self.initialize_session_variables(self.sess)
-            self.load_model(self.sess)
-            if release:
-                release_name = self.config.LOAD_PATH + ".release"
-                print("Releasing model, output model: %s" % release_name)
-                self.saver.save(self.sess, release_name)
-                shutil.copyfile(
-                    src=self.config.LOAD_PATH + ".dict", dst=release_name + ".dict"
-                )
-                return None
-        model_dirname = os.path.dirname(
-            self.config.SAVE_PATH if self.config.SAVE_PATH else self.config.LOAD_PATH
-        )
-        ref_file_name = model_dirname + "/ref.txt"
-        predicted_file_name = model_dirname + "/pred.txt"
-        if not os.path.exists(model_dirname):
-            os.makedirs(model_dirname)
-
-        with open(model_dirname + "/log.txt", "w") as output_file, open(
-            ref_file_name, "w"
-        ) as ref_file, open(predicted_file_name, "w") as pred_file:
-            num_correct_predictions = 0
-            total_predictions = 0
-            total_prediction_batches = 0
-            true_positive, false_positive, false_negative = 0, 0, 0
-            self.eval_queue.reset(self.sess)
-            start_time = time.time()
-
-            try:
-                while True:
-                    predicted_indices, true_target_strings, top_values = self.sess.run(
-                        [
-                            self.eval_predicted_indices_op,
-                            self.eval_true_target_strings_op,
-                            self.eval_topk_values,
-                        ]
-                    )
-                    true_target_strings = Common.binary_to_string_list(
-                        true_target_strings
-                    )
-                    ref_file.write(
-                        "\n".join(
-                            [
-                                name.replace(Common.internal_delimiter, " ")
-                                for name in true_target_strings
-                            ]
-                        )
-                        + "\n"
-                    )
-                    if self.config.BEAM_WIDTH > 0:
-                        # predicted indices: (batch, time, beam_width)
-                        predicted_strings = [
-                            [
-                                [self.index_to_target[i] for i in timestep]
-                                for timestep in example
-                            ]
-                            for example in predicted_indices
-                        ]
-                        predicted_strings = [
-                            list(map(list, zip(*example)))
-                            for example in predicted_strings
-                        ]  # (batch, top-k, target_length)
-                        pred_file.write(
-                            "\n".join(
-                                [
-                                    " ".join(Common.filter_impossible_names(words))
-                                    for words in predicted_strings[0]
-                                ]
-                            )
-                            + "\n"
-                        )
-                    else:
-                        predicted_strings = [
-                            [self.index_to_target[i] for i in example]
-                            for example in predicted_indices
-                        ]
-                        pred_file.write(
-                            "\n".join(
-                                [
-                                    " ".join(Common.filter_impossible_names(words))
-                                    for words in predicted_strings
-                                ]
-                            )
-                            + "\n"
-                        )
-
-                    num_correct_predictions = self.update_correct_predictions(
-                        num_correct_predictions,
-                        output_file,
-                        zip(true_target_strings, predicted_strings),
-                    )
-                    true_positive, false_positive, false_negative = self.update_per_subtoken_statistics(
-                        zip(true_target_strings, predicted_strings),
-                        true_positive,
-                        false_positive,
-                        false_negative,
-                    )
-
-                    total_predictions += len(true_target_strings)
-                    total_prediction_batches += 1
-                    if total_prediction_batches % self.num_batches_to_log == 0:
-                        elapsed = time.time() - start_time
-                        self.trace_evaluation(
-                            output_file,
-                            num_correct_predictions,
-                            total_predictions,
-                            elapsed,
-                        )
-            except tf.errors.OutOfRangeError:
-                pass
-
-            print("Done testing, epoch reached")
-            output_file.write(str(num_correct_predictions / total_predictions) + "\n")
-            # Common.compute_bleu(ref_file_name, predicted_file_name)
-
-        elapsed = int(time.time() - eval_start_time)
-        precision, recall, f1 = self.calculate_results(
-            true_positive, false_positive, false_negative
-        )
-        print(
-            "Evaluation time: %sh%sm%ss"
-            % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60)
-        )
-        return num_correct_predictions / total_predictions, precision, recall, f1
-
-    def update_correct_predictions(self, num_correct_predictions, output_file, results):
-        for original_name, predicted in results:
-            if self.config.BEAM_WIDTH > 0:
-                predicted = predicted[0]
-            original_name_parts = original_name.split(Common.internal_delimiter)
-            filtered_original = Common.filter_impossible_names(original_name_parts)
-            filtered_predicted_parts = Common.filter_impossible_names(predicted)
-            output_file.write(
-                "Original: "
-                + Common.internal_delimiter.join(original_name_parts)
-                + " , predicted 1st: "
-                + Common.internal_delimiter.join(
-                    [target for target in filtered_predicted_parts]
-                )
-                + "\n"
-            )
-            if (
-                filtered_original == filtered_predicted_parts
-                or Common.unique(filtered_original)
-                == Common.unique(filtered_predicted_parts)
-                or "".join(filtered_original) == "".join(filtered_predicted_parts)
-            ):
-                num_correct_predictions += 1
-        return num_correct_predictions
-
-    def update_per_subtoken_statistics(
-        self, results, true_positive, false_positive, false_negative
-    ):
-        for original_name, predicted in results:
-            if self.config.BEAM_WIDTH > 0:
-                predicted = predicted[0]
-            filtered_predicted_names = Common.filter_impossible_names(predicted)
-            filtered_original_subtokens = Common.filter_impossible_names(
-                original_name.split(Common.internal_delimiter)
-            )
-
-            if "".join(filtered_original_subtokens) == "".join(
-                filtered_predicted_names
-            ):
-                true_positive += len(filtered_original_subtokens)
-                continue
-
-            for subtok in filtered_predicted_names:
-                if subtok in filtered_original_subtokens:
-                    true_positive += 1
-                else:
-                    false_positive += 1
-            for subtok in filtered_original_subtokens:
-                if not subtok in filtered_predicted_names:
-                    false_negative += 1
-        return true_positive, false_positive, false_negative
-
-    def print_hyperparams(self):
-        print("Training batch size:\t\t\t", self.config.BATCH_SIZE)
-        print("Dataset path:\t\t\t\t", self.config.TRAIN_PATH)
-        print("Training file path:\t\t\t", self.config.TRAIN_PATH + ".train.c2s")
-        print("Validation path:\t\t\t", self.config.TEST_PATH)
-        print("Taking max contexts from each example:\t", self.config.MAX_CONTEXTS)
-        print("Random path sampling:\t\t\t", self.config.RANDOM_CONTEXTS)
-        print("Embedding size:\t\t\t\t", self.config.EMBEDDINGS_SIZE)
-        if self.config.BIRNN:
-            print("Using BiLSTMs, each of size:\t\t", self.config.RNN_SIZE // 2)
-        else:
-            print("Uni-directional LSTM of size:\t\t", self.config.RNN_SIZE)
-        print("Decoder size:\t\t\t\t", self.config.DECODER_SIZE)
-        print("Decoder layers:\t\t\t\t", self.config.NUM_DECODER_LAYERS)
-        print("Max path lengths:\t\t\t", self.config.MAX_PATH_LENGTH)
-        print("Max subtokens in a token:\t\t", self.config.MAX_NAME_PARTS)
-        print("Max target length:\t\t\t", self.config.MAX_TARGET_PARTS)
-        print(
-            "Embeddings dropout keep_prob:\t\t",
-            self.config.EMBEDDINGS_DROPOUT_KEEP_PROB,
-        )
-        print("LSTM dropout keep_prob:\t\t\t", self.config.RNN_DROPOUT_KEEP_PROB)
-        print("============================================")
-
-    @staticmethod
-    def calculate_results(true_positive, false_positive, false_negative):
-        if true_positive + false_positive > 0:
-            precision = true_positive / (true_positive + false_positive)
-        else:
-            precision = 0
-        if true_positive + false_negative > 0:
-            recall = true_positive / (true_positive + false_negative)
-        else:
-            recall = 0
-        if precision + recall > 0:
-            f1 = 2 * precision * recall / (precision + recall)
-        else:
-            f1 = 0
-        return precision, recall, f1
-
-    @staticmethod
-    def trace_evaluation(output_file, correct_predictions, total_predictions, elapsed):
-        accuracy_message = str(correct_predictions / total_predictions)
-        throughput_message = "Prediction throughput: %d" % int(
-            total_predictions / (elapsed if elapsed > 0 else 1)
-        )
-        output_file.write(accuracy_message + "\n")
-        output_file.write(throughput_message)
-        # print(accuracy_message)
-        print(throughput_message)
-
     def build_training_graph(self, input_tensors):
         target_index = input_tensors[reader.TARGET_INDEX_KEY]
         target_lengths = input_tensors[reader.TARGET_LENGTH_KEY]
@@ -457,7 +250,7 @@ class Model:
                 dtype=tf.float32,
                 initializer=tf.contrib.layers.variance_scaling_initializer(
                     factor=1.0, mode="FAN_OUT", uniform=True
-                ),  # TODO: Refactor tf.contrib
+                ),  # TODO: Refactor tf.contrib tf.keras.initializers.VarianceScaling
             )
             target_words_vocab = tf.get_variable(
                 "TARGET_WORDS_VOCAB",
@@ -488,7 +281,7 @@ class Model:
                 path_target_lengths=path_target_lengths,
             )
 
-            batch_size = tf.shape(target_index)[0]
+            batch_size = tf.shape(target_index)[0]  # TensorFlow
             outputs, final_states = self.decode_outputs(
                 target_words_vocab=target_words_vocab,
                 target_input=target_index,
@@ -496,7 +289,7 @@ class Model:
                 batched_contexts=batched_contexts,
                 valid_mask=valid_context_mask,
             )
-            step = tf.Variable(0, trainable=False)
+            step = tf.Variable(0, trainable=False)  # TensorFlow
 
             logits = (
                 outputs.rnn_output
@@ -514,26 +307,26 @@ class Model:
                 batch_size
             )
 
-            if self.config.USE_MOMENTUM:
-                learning_rate = tf.train.exponential_decay(
-                    0.01,
-                    step * self.config.BATCH_SIZE,
-                    self.num_training_examples,
-                    0.95,
-                    staircase=True,
-                )
-                optimizer = tf.train.MomentumOptimizer(
-                    learning_rate, 0.95, use_nesterov=True
-                )
-                train_op = optimizer.minimize(loss, global_step=step)
-            else:
-                params = tf.trainable_variables()
-                gradients = tf.gradients(loss, params)
-                clipped_gradients, _ = tf.clip_by_global_norm(gradients, clip_norm=5)
-                optimizer = tf.train.AdamOptimizer()
-                train_op = optimizer.apply_gradients(zip(clipped_gradients, params))
+            # if self.config.USE_MOMENTUM:
+            learning_rate = tf.train.exponential_decay(  # TensorFlow
+                0.01,
+                step * self.config.BATCH_SIZE,
+                self.num_training_examples,
+                0.95,
+                staircase=True,
+            )
+            optimizer = tf.train.MomentumOptimizer(  # TensorFlow
+                learning_rate, 0.95, use_nesterov=True
+            )
+            train_op = optimizer.minimize(loss, global_step=step)
+            # else:
+            #     params = tf.trainable_variables()
+            #     gradients = tf.gradients(loss, params)
+            #     clipped_gradients, _ = tf.clip_by_global_norm(gradients, clip_norm=5)
+            #     optimizer = tf.train.AdamOptimizer()
+            #     train_op = optimizer.apply_gradients(zip(clipped_gradients, params))
 
-            self.saver = tf.train.Saver(max_to_keep=10)
+            self.saver = tf.train.Saver(max_to_keep=10)  # TensorFlow
 
         return train_op, loss
 
@@ -546,44 +339,49 @@ class Model:
         valid_mask,
         is_evaluating=False,
     ):
-        num_contexts_per_example = tf.count_nonzero(valid_mask, axis=-1)
+        num_contexts_per_example = tf.count_nonzero(valid_mask, axis=-1)  # TensorFlow
 
-        start_fill = tf.fill(
+        start_fill = tf.fill(  # TensorFlow
             [batch_size], self.target_to_index[Common.SOS]
         )  # (batch, )
         if self.config.GRU:
-            decoder_cell = tf.nn.rnn_cell.MultiRNNCell( # TODO: tf.keras.layers.StackedRNNCells
+            decoder_cell = tf.nn.rnn_cell.MultiRNNCell(  # TODO: tf.keras.layers.StackedRNNCells
                 [
                     tf.nn.rnn_cell.GRUCell(self.config.DECODER_SIZE)
                     for _ in range(self.config.NUM_DECODER_LAYERS)
                 ]
             )
         else:
-            decoder_cell = tf.nn.rnn_cell.MultiRNNCell( # TODO: tf.keras.layers.StackedRNNCells
+            decoder_cell = tf.nn.rnn_cell.MultiRNNCell(  # TODO: tf.keras.layers.StackedRNNCells
                 [
-                    tf.nn.rnn_cell.LSTMCell(
+                    tf.nn.rnn_cell.LSTMCell(  # TensorFlow
                         self.config.DECODER_SIZE
                     )  # tf.keras.layers.GRUCell
                     for _ in range(self.config.NUM_DECODER_LAYERS)
                 ]
             )
-        contexts_sum = tf.reduce_sum(
-            batched_contexts * tf.expand_dims(valid_mask, -1), axis=1
+        contexts_sum = tf.reduce_sum(  # TensorFlow
+            batched_contexts * tf.expand_dims(valid_mask, -1), axis=1  # TensorFlow
         )  # (batch_size, dim * 2 + rnn_size)
-        contexts_average = tf.divide(
-            contexts_sum, tf.to_float(tf.expand_dims(num_contexts_per_example, -1))
+        contexts_average = tf.divide(  # TensorFlow
+            contexts_sum,
+            tf.to_float(tf.expand_dims(num_contexts_per_example, -1)),  # TensorFlow
         )
         if self.config.GRU:
             fake_encoder_state = tuple(
-                tf.nn.rnn_cell.LSTMStateTuple(contexts_average, contexts_average)
+                contexts_average
                 for _ in range(self.config.NUM_DECODER_LAYERS)
             )
         else:
             fake_encoder_state = tuple(
-                tf.nn.rnn_cell.LSTMStateTuple(contexts_average, contexts_average)
+                tf.nn.rnn_cell.LSTMStateTuple(
+                    contexts_average, contexts_average
+                )  # TensorFlow
                 for _ in range(self.config.NUM_DECODER_LAYERS)
             )
-        projection_layer = tf.layers.Dense(self.target_vocab_size, use_bias=False)
+        projection_layer = tf.layers.Dense(
+            self.target_vocab_size, use_bias=False
+        )  # TensorFlow
         if is_evaluating and self.config.BEAM_WIDTH > 0:
             batched_contexts = tf.contrib.seq2seq.tile_batch(  # TODO: Refactor tf.contrib
                 batched_contexts, multiplier=self.config.BEAM_WIDTH
@@ -591,9 +389,27 @@ class Model:
             num_contexts_per_example = tf.contrib.seq2seq.tile_batch(  # TODO: Refactor tf.contrib
                 num_contexts_per_example, multiplier=self.config.BEAM_WIDTH
             )
-        attention_mechanism = tf.contrib.seq2seq.LuongAttention(  # TODO: Refactor tf.contrib
-            num_units=self.config.DECODER_SIZE, memory=batched_contexts
-        )
+        if self.config.ATTENTION == "luong":
+            attention_mechanism = tf.contrib.seq2seq.LuongAttention(  # TODO: Refactor tf.contrib
+                num_units=self.config.DECODER_SIZE,
+                memory=batched_contexts,
+                memory_sequence_length=None,
+                scale=self.config.NORM_OR_SCALE,
+                probability_fn=None,
+                score_mask_value=None,
+                dtype=None
+            )
+        elif self.config.ATTENTION == "bahdanau":
+            attention_mechanism = tf.contrib.seq2seq.BahdanauAttention(  # TODO: Refactor tf.contrib
+                num_units=self.config.DECODER_SIZE,
+                memory=batched_contexts,
+                memory_sequence_length=None,
+                normalize=self.config.NORM_OR_SCALE,
+                probability_fn=None,
+                score_mask_value=None,
+                dtype=None
+            )
+
         # TF doesn't support beam search with alignment history
         should_save_alignment_history = is_evaluating and self.config.BEAM_WIDTH == 0
         decoder_cell = tf.contrib.seq2seq.AttentionWrapper(  # TODO: Refactor tf.contrib
@@ -660,6 +476,7 @@ class Model:
                 initial_state=initial_state,
                 output_layer=projection_layer,
             )
+
         outputs, final_states, final_sequence_lengths = tf.contrib.seq2seq.dynamic_decode(  # TODO: Refactor tf.contrib
             decoder, maximum_iterations=self.config.MAX_TARGET_PARTS + 1
         )
@@ -698,13 +515,16 @@ class Model:
                     self.config.RNN_SIZE / 2
                 )  # tf.keras.layers.GRUCell
                 if not is_evaluating:
-                    rnn_cell_fw = tf.nn.rnn_cell.DropoutWrapper( #TODO: tf.keras.layers.Dropout
+                    rnn_cell_fw = tf.nn.rnn_cell.DropoutWrapper(  # TODO: tf.keras.layers.Dropout
                         rnn_cell_fw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
                     )
-                    rnn_cell_bw = tf.nn.rnn_cell.DropoutWrapper( #TODO: tf.keras.layers.Dropout
+                    rnn_cell_bw = tf.nn.rnn_cell.DropoutWrapper(  # TODO: tf.keras.layers.Dropout
                         rnn_cell_bw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
                     )
-                _, (state_fw, state_bw) = tf.nn.bidirectional_dynamic_rnn( #TODO: keras.layers.Bidirectional(keras.layers.RNN(cell))
+                _, (
+                    state_fw,
+                    state_bw,
+                ) = tf.nn.bidirectional_dynamic_rnn(  # TODO: keras.layers.Bidirectional(keras.layers.RNN(cell))
                     cell_fw=rnn_cell_fw,
                     cell_bw=rnn_cell_bw,
                     inputs=flat_paths,
@@ -717,18 +537,21 @@ class Model:
             else:
                 rnn_cell_fw = tf.nn.rnn_cell.LSTMCell(
                     self.config.RNN_SIZE / 2
-                )  #TODO: tf.keras.layers.GRUCell
+                )  # TODO: tf.keras.layers.GRUCell
                 rnn_cell_bw = tf.nn.rnn_cell.LSTMCell(
                     self.config.RNN_SIZE / 2
                 )  # TODO: tf.keras.layers.GRUCell
                 if not is_evaluating:
-                    rnn_cell_fw = tf.nn.rnn_cell.DropoutWrapper( #TODO: tf.keras.layers.Dropout
+                    rnn_cell_fw = tf.nn.rnn_cell.DropoutWrapper(  # TODO: tf.keras.layers.Dropout
                         rnn_cell_fw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
                     )
-                    rnn_cell_bw = tf.nn.rnn_cell.DropoutWrapper( #TODO: tf.keras.layers.Dropout
+                    rnn_cell_bw = tf.nn.rnn_cell.DropoutWrapper(  # TODO: tf.keras.layers.Dropout
                         rnn_cell_bw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
                     )
-                _, (state_fw, state_bw) = tf.nn.bidirectional_dynamic_rnn(#TODO: keras.layers.Bidirectional(keras.layers.RNN(cell))
+                _, (
+                    state_fw,
+                    state_bw,
+                ) = tf.nn.bidirectional_dynamic_rnn(  # TODO: keras.layers.Bidirectional(keras.layers.RNN(cell))
                     cell_fw=rnn_cell_fw,
                     cell_bw=rnn_cell_bw,
                     inputs=flat_paths,
@@ -828,7 +651,7 @@ class Model:
                 context_embed, self.config.EMBEDDINGS_DROPOUT_KEEP_PROB
             )
 
-        batched_embed = tf.layers.dense( # TODO: keras.layers.dense
+        batched_embed = tf.layers.dense(  # TODO: keras.layers.dense
             inputs=context_embed,
             units=self.config.DECODER_SIZE,
             activation=tf.nn.tanh,
@@ -837,6 +660,16 @@ class Model:
         )
 
         return batched_embed
+
+    @staticmethod
+    def initialize_session_variables(sess):
+        return sess.run(
+            tf.group(
+                tf.global_variables_initializer(),
+                tf.local_variables_initializer(),
+                tf.tables_initializer(),
+            )
+        )
 
     def build_test_graph(self, input_tensors):
         target_index = input_tensors[reader.TARGET_INDEX_KEY]
@@ -1053,16 +886,255 @@ class Model:
             self.config.take_model_hyperparams_from(saved_config)
             print("Done loading dictionaries")
 
-    @staticmethod
-    def initialize_session_variables(sess):
-        sess.run(
-            tf.group(
-                tf.global_variables_initializer(),
-                tf.local_variables_initializer(),
-                tf.tables_initializer(),
+    def evaluate(self, release=False):
+        eval_start_time = time.time()
+        if self.eval_queue is None:
+            self.eval_queue = reader.Reader(
+                subtoken_to_index=self.subtoken_to_index,
+                node_to_index=self.node_to_index,
+                target_to_index=self.target_to_index,
+                config=self.config,
+                is_evaluating=True,
             )
-        )
+            reader_output = self.eval_queue.get_output()
+            self.eval_predicted_indices_op, self.eval_topk_values, _, _ = self.build_test_graph(
+                reader_output
+            )
+            self.eval_true_target_strings_op = reader_output[reader.TARGET_STRING_KEY]
+            self.saver = tf.train.Saver(max_to_keep=10)
 
+        if self.config.LOAD_PATH and not self.config.TRAIN_PATH:
+            self.initialize_session_variables(self.sess)
+            self.load_model(self.sess)
+            if release:
+                release_name = self.config.LOAD_PATH + ".release"
+                print("Releasing model, output model: %s" % release_name)
+                self.saver.save(self.sess, release_name)
+                shutil.copyfile(
+                    src=self.config.LOAD_PATH + ".dict", dst=release_name + ".dict"
+                )
+                return None
+        model_dirname = os.path.dirname(
+            self.config.SAVE_PATH if self.config.SAVE_PATH else self.config.LOAD_PATH
+        )
+        ref_file_name = model_dirname + "/ref.txt"
+        predicted_file_name = model_dirname + "/pred.txt"
+        if not os.path.exists(model_dirname):
+            os.makedirs(model_dirname)
+
+        with open(model_dirname + "/log.txt", "w") as output_file, open(
+            ref_file_name, "w"
+        ) as ref_file, open(predicted_file_name, "w") as pred_file:
+            num_correct_predictions = 0
+            total_predictions = 0
+            total_prediction_batches = 0
+            true_positive, false_positive, false_negative = 0, 0, 0
+            self.eval_queue.reset(self.sess)
+            start_time = time.time()
+
+            try:
+                while True:
+                    predicted_indices, true_target_strings, top_values = self.sess.run(
+                        [
+                            self.eval_predicted_indices_op,
+                            self.eval_true_target_strings_op,
+                            self.eval_topk_values,
+                        ]
+                    )
+                    true_target_strings = Common.binary_to_string_list(
+                        true_target_strings
+                    )
+                    ref_file.write(
+                        "\n".join(
+                            [
+                                name.replace(Common.internal_delimiter, " ")
+                                for name in true_target_strings
+                            ]
+                        )
+                        + "\n"
+                    )
+                    if self.config.BEAM_WIDTH > 0:
+                        # predicted indices: (batch, time, beam_width)
+                        predicted_strings = [
+                            [
+                                [self.index_to_target[i] for i in timestep]
+                                for timestep in example
+                            ]
+                            for example in predicted_indices
+                        ]
+                        predicted_strings = [
+                            list(map(list, zip(*example)))
+                            for example in predicted_strings
+                        ]  # (batch, top-k, target_length)
+                        pred_file.write(
+                            "\n".join(
+                                [
+                                    " ".join(Common.filter_impossible_names(words))
+                                    for words in predicted_strings[0]
+                                ]
+                            )
+                            + "\n"
+                        )
+                    else:
+                        predicted_strings = [
+                            [self.index_to_target[i] for i in example]
+                            for example in predicted_indices
+                        ]
+                        pred_file.write(
+                            "\n".join(
+                                [
+                                    " ".join(Common.filter_impossible_names(words))
+                                    for words in predicted_strings
+                                ]
+                            )
+                            + "\n"
+                        )
+
+                    num_correct_predictions = self.update_correct_predictions(
+                        num_correct_predictions,
+                        output_file,
+                        zip(true_target_strings, predicted_strings),
+                    )
+                    true_positive, false_positive, false_negative = self.update_per_subtoken_statistics(
+                        zip(true_target_strings, predicted_strings),
+                        true_positive,
+                        false_positive,
+                        false_negative,
+                    )
+
+                    total_predictions += len(true_target_strings)
+                    total_prediction_batches += 1
+                    if total_prediction_batches % self.num_batches_to_log == 0:
+                        elapsed = time.time() - start_time
+                        self.trace_evaluation(
+                            output_file,
+                            num_correct_predictions,
+                            total_predictions,
+                            elapsed,
+                        )
+            except tf.errors.OutOfRangeError:
+                pass
+
+            print("Done testing, epoch reached")
+            output_file.write(str(num_correct_predictions / total_predictions) + "\n")
+            # Common.compute_bleu(ref_file_name, predicted_file_name)
+
+        elapsed = int(time.time() - eval_start_time)
+        precision, recall, f1 = self.calculate_results(
+            true_positive, false_positive, false_negative
+        )
+        print(
+            "Evaluation time: %sh%sm%ss"
+            % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60)
+        )
+        return num_correct_predictions / total_predictions, precision, recall, f1
+
+    def update_correct_predictions(self, num_correct_predictions, output_file, results):
+        for original_name, predicted in results:
+            if self.config.BEAM_WIDTH > 0:
+                predicted = predicted[0]
+            original_name_parts = original_name.split(Common.internal_delimiter)
+            filtered_original = Common.filter_impossible_names(original_name_parts)
+            filtered_predicted_parts = Common.filter_impossible_names(predicted)
+            output_file.write(
+                "Original: "
+                + Common.internal_delimiter.join(original_name_parts)
+                + " , predicted 1st: "
+                + Common.internal_delimiter.join(
+                    [target for target in filtered_predicted_parts]
+                )
+                + "\n"
+            )
+            if (
+                filtered_original == filtered_predicted_parts
+                or Common.unique(filtered_original)
+                == Common.unique(filtered_predicted_parts)
+                or "".join(filtered_original) == "".join(filtered_predicted_parts)
+            ):
+                num_correct_predictions += 1
+        return num_correct_predictions
+
+    def update_per_subtoken_statistics(
+        self, results, true_positive, false_positive, false_negative
+    ):
+        for original_name, predicted in results:
+            if self.config.BEAM_WIDTH > 0:
+                predicted = predicted[0]
+            filtered_predicted_names = Common.filter_impossible_names(predicted)
+            filtered_original_subtokens = Common.filter_impossible_names(
+                original_name.split(Common.internal_delimiter)
+            )
+
+            if "".join(filtered_original_subtokens) == "".join(
+                filtered_predicted_names
+            ):
+                true_positive += len(filtered_original_subtokens)
+                continue
+
+            for subtok in filtered_predicted_names:
+                if subtok in filtered_original_subtokens:
+                    true_positive += 1
+                else:
+                    false_positive += 1
+            for subtok in filtered_original_subtokens:
+                if not subtok in filtered_predicted_names:
+                    false_negative += 1
+        return true_positive, false_positive, false_negative
+
+    def print_hyperparams(self):
+        print("Training batch size:\t\t\t", self.config.BATCH_SIZE)
+        print("Dataset path:\t\t\t\t", self.config.TRAIN_PATH)
+        print("Training file path:\t\t\t", self.config.TRAIN_PATH + ".train.c2s")
+        print("Validation path:\t\t\t", self.config.TEST_PATH)
+        print("Taking max contexts from each example:\t", self.config.MAX_CONTEXTS)
+        print("Random path sampling:\t\t\t", self.config.RANDOM_CONTEXTS)
+        print("Embedding size:\t\t\t\t", self.config.EMBEDDINGS_SIZE)
+        if self.config.BIRNN:
+            print("Using BiLSTMs, each of size:\t\t", self.config.RNN_SIZE // 2)
+        else:
+            print("Uni-directional LSTM of size:\t\t", self.config.RNN_SIZE)
+        if self.config.GRU:
+            print("Using GRUs, each of size:\t\t", self.config.RNN_SIZE // 2)
+        else:
+            print("Using LSTM of size:\t\t", self.config.RNN_SIZE)
+        print("Decoder size:\t\t\t\t", self.config.DECODER_SIZE)
+        print("Decoder layers:\t\t\t\t", self.config.NUM_DECODER_LAYERS)
+        print("Max path lengths:\t\t\t", self.config.MAX_PATH_LENGTH)
+        print("Max subtokens in a token:\t\t", self.config.MAX_NAME_PARTS)
+        print("Max target length:\t\t\t", self.config.MAX_TARGET_PARTS)
+        print(
+            "Embeddings dropout keep_prob:\t\t",
+            self.config.EMBEDDINGS_DROPOUT_KEEP_PROB,
+        )
+        print("LSTM dropout keep_prob:\t\t\t", self.config.RNN_DROPOUT_KEEP_PROB)
+        print("============================================")
+
+    @staticmethod
+    def calculate_results(true_positive, false_positive, false_negative):
+        if true_positive + false_positive > 0:
+            precision = true_positive / (true_positive + false_positive)
+        else:
+            precision = 0
+        if true_positive + false_negative > 0:
+            recall = true_positive / (true_positive + false_negative)
+        else:
+            recall = 0
+        if precision + recall > 0:
+            f1 = 2 * precision * recall / (precision + recall)
+        else:
+            f1 = 0
+        return precision, recall, f1
+
+    @staticmethod
+    def trace_evaluation(output_file, correct_predictions, total_predictions, elapsed):
+        accuracy_message = str(correct_predictions / total_predictions)
+        throughput_message = "Prediction throughput: %d" % int(
+            total_predictions / (elapsed if elapsed > 0 else 1)
+        )
+        output_file.write(accuracy_message + "\n")
+        output_file.write(throughput_message)
+        # print(accuracy_message)
+        print(throughput_message)
     def get_should_reuse_variables(self):
         if self.config.TRAIN_PATH:
             return True
