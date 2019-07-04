@@ -1,15 +1,12 @@
-# from comet_ml import Experiment
+from comet_ml import Experiment
+import comet_ml
 import _pickle as pickle
 import os
 import time
-import tkinter as tk
-
-# import matplotlib
-# matplotlib.use('TkAgg')
-# import matplotlib.pyplot as plt
 import numpy as np
 import shutil
 import tensorflow as tf
+from tensorflow.contrib.memory_stats.python.ops.memory_stats_ops import BytesInUse
 
 
 import reader
@@ -19,14 +16,17 @@ from common import Common
 class Model:
     topk = 10
     num_batches_to_log = 100
-    # experiment = Experiment(
-    #     api_key="wRZBv07osQnjYfhIUGphpKpxH", project_name="general", workspace="cspiess"
-    # )
 
     def __init__(self, config):
         os.environ["TF_CPP_MIN_LOG_LEVEL"] = "0"
         tf.logging.set_verbosity(tf.logging.INFO)
         tf.random.set_random_seed(1234)
+        self.experiment = Experiment(
+            api_key="wRZBv07osQnjYfhIUGphpKpxH",
+            project_name="code2seq",
+            workspace="cspiess",
+        )
+        
         self.config = config
         self.sess = tf.Session()  # TensorFlow
 
@@ -110,32 +110,63 @@ class Model:
             self.queue_thread.get_output()
         )
 
-        # tf.print([optimizer, train_loss])
-
-        # writer = tf.summary.FileWriter('./graphs', self.sess.graph)
-
         self.print_hyperparams()
-
         # print(
         #     "Number of trainable params:",
         #     np.sum(
         #         [np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]
         #     ),
         # )
-        # tvars = tf.trainable_variables()
+
         self.initialize_session_variables(self.sess)
-        # for var, val in zip(tvars, tvars_vals):
-        #     print(var.name, val)
 
         print("Initalized variables")
-        # if self.config.LOAD_PATH:
-        #     self.load_model(self.sess)
+        if self.config.LOAD_PATH:
+            self.load_model(self.sess)
 
         # time.sleep(1)
         print("Started reader...")
 
         multi_batch_start_time = time.time()
-        # self.experiment.log_parameters({"num_epochs": self.config.NUM_EPOCHS, "batch_size": self.config.BATCH_SIZE})
+        self.experiment.log_parameters(
+            {
+                "num_epochs": self.config.NUM_EPOCHS,
+                "batch_size": self.config.BATCH_SIZE,
+                "NUM_EPOCHS": self.config.NUM_EPOCHS,
+                "SAVE_EVERY_EPOCHS": self.config.SAVE_EVERY_EPOCHS,
+                "PATIENCE": self.config.PATIENCE,
+                "BATCH_SIZE": self.config.BATCH_SIZE,
+                "TEST_BATCH_SIZE": self.config.TEST_BATCH_SIZE,
+                "READER_NUM_PARALLEL_BATCHES": self.config.READER_NUM_PARALLEL_BATCHES,
+                "SHUFFLE_BUFFER_SIZE": self.config.SHUFFLE_BUFFER_SIZE,
+                "CSV_BUFFER_SIZE": self.config.CSV_BUFFER_SIZE,
+                "TRAIN_PATH": self.config.TRAIN_PATH,
+                "TEST_PATH": self.config.TEST_PATH,
+                "DATA_NUM_CONTEXTS": self.config.DATA_NUM_CONTEXTS,
+                "MAX_CONTEXTS": self.config.MAX_CONTEXTS,
+                "SUBTOKENS_VOCAB_MAX_SIZE": self.config.SUBTOKENS_VOCAB_MAX_SIZE,
+                "TARGET_VOCAB_MAX_SIZE": self.config.TARGET_VOCAB_MAX_SIZE,
+                "EMBEDDINGS_SIZE": self.config.EMBEDDINGS_SIZE,
+                "RNN_SIZE": self.config.RNN_SIZE,
+                "DECODER_SIZE": self.config.DECODER_SIZE,
+                "NUM_DECODER_LAYERS": self.config.NUM_DECODER_LAYERS,
+                "SAVE_PATH": self.config.SAVE_PATH,
+                "LOAD_PATH": self.config.LOAD_PATH,
+                "MAX_PATH_LENGTH": self.config.MAX_PATH_LENGTH,
+                "MAX_NAME_PARTS": self.config.MAX_NAME_PARTS,
+                "MAX_TARGET_PARTS": self.config.MAX_TARGET_PARTS,
+                "EMBEDDINGS_DROPOUT_KEEP_PROB": self.config.EMBEDDINGS_DROPOUT_KEEP_PROB,
+                "RNN_DROPOUT_KEEP_PROB": self.config.RNN_DROPOUT_KEEP_PROB,
+                "BIRNN": self.config.BIRNN,
+                "GRU": self.config.GRU,
+                "RANDOM_CONTEXTS": self.config.RANDOM_CONTEXTS,
+                "BEAM_WIDTH": self.config.BEAM_WIDTH,
+                "USE_MOMENTUM": self.config.USE_MOMENTUM,
+                "RELEASE": self.config.RELEASE,
+                "ATTENTION": self.config.ATTENTION,
+            }
+        )
+
         for epoch in range(
             1, (self.config.NUM_EPOCHS // self.config.SAVE_EVERY_EPOCHS) + 1
         ):
@@ -159,20 +190,18 @@ class Model:
                             tf.NodeDef.ExperimentalDebugInfo, None, "I'm fake!"
                         )
                     _, batch_loss = self.sess.run([optimizer, train_loss])
-                    tvars = tf.trainable_variables()
-                    # tvars_vals = sess.run(tvars)
-                    tf.print(tvars)
-                    # for var, val in zip(tvars, x):
-                    #     print(var.name, val)
-                    # self.experiment.log_metric("loss", batch_loss)
-                    # self.experiment.set_step(batch_num)
+                    self.experiment.set_step(batch_num)
+
+                    # with tf.device('/device:GPU:0'):  # Replace with device you are interested in
+                    #     bytes_in_use = BytesInUse()
+                    # with tf.Session() as sess:
+                    #     self.experiment.log_metric("mem_use", sess.run(bytes_in_use))
+                    
+                    self.experiment.log_metric("loss", batch_loss)
+                    
                     sum_loss += batch_loss  # aka train loss
-                    # losses.append(batch_loss)
 
                     if batch_num % self.num_batches_to_log == 0:
-                        # plt.show()
-
-                        # plt.savefig('myfilename.png')
                         self.trace(sum_loss, batch_num, multi_batch_start_time)
                         sum_loss = 0
                         multi_batch_start_time = time.time()
@@ -187,6 +216,10 @@ class Model:
                     "After %d epochs: Precision: %.5f, recall: %.5f, F1: %.5f"
                     % (self.epochs_trained, precision, recall, f1)
                 )
+                self.experiment.log_metric("epochs_trained",self.epochs_trained,step=self.epochs_trained)
+                self.experiment.log_metric("precision",precision,step=self.epochs_trained)
+                self.experiment.log_metric("recall",recall,step=self.epochs_trained)
+                self.experiment.log_metric("f1",f1,step=self.epochs_trained)
                 if f1 > best_f1:
                     best_f1 = f1
                     best_f1_precision = precision
@@ -217,6 +250,7 @@ class Model:
             "Training time: %sh%sm%ss\n"
             % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60)
         )
+        
 
     def trace(self, sum_loss, batch_num, multi_batch_start_time):
         multi_batch_elapsed = time.time() - multi_batch_start_time
@@ -294,10 +328,14 @@ class Model:
             logits = (
                 outputs.rnn_output
             )  # (batch, max_output_length, dim * 2 + rnn_size)
-
-            crossent = tf.nn.sparse_softmax_cross_entropy_with_logits(
-                labels=target_index, logits=logits
-            )
+            if self.config.SPARSE_CROSS_ENT:
+                crossent = tf.nn.sparse_softmax_cross_entropy_with_logits(
+                    labels=target_index, logits=logits
+                )
+            else:
+                crossent = tf.nn.softmax_cross_entropy_with_logits_v2(
+                    labels=target_index, logits=logits
+                )
             target_words_nonzero = tf.sequence_mask(
                 target_lengths + 1,
                 maxlen=self.config.MAX_TARGET_PARTS + 1,
@@ -369,8 +407,7 @@ class Model:
         )
         if self.config.GRU:
             fake_encoder_state = tuple(
-                contexts_average
-                for _ in range(self.config.NUM_DECODER_LAYERS)
+                contexts_average for _ in range(self.config.NUM_DECODER_LAYERS)
             )
         else:
             fake_encoder_state = tuple(
@@ -397,7 +434,7 @@ class Model:
                 scale=self.config.NORM_OR_SCALE,
                 probability_fn=None,
                 score_mask_value=None,
-                dtype=None
+                dtype=None,
             )
         elif self.config.ATTENTION == "bahdanau":
             attention_mechanism = tf.contrib.seq2seq.BahdanauAttention(  # TODO: Refactor tf.contrib
@@ -407,7 +444,7 @@ class Model:
                 normalize=self.config.NORM_OR_SCALE,
                 probability_fn=None,
                 score_mask_value=None,
-                dtype=None
+                dtype=None,
             )
 
         # TF doesn't support beam search with alignment history
@@ -521,19 +558,19 @@ class Model:
                     rnn_cell_bw = tf.nn.rnn_cell.DropoutWrapper(  # TODO: tf.keras.layers.Dropout
                         rnn_cell_bw, output_keep_prob=self.config.RNN_DROPOUT_KEEP_PROB
                     )
-                _, (
-                    state_fw,
-                    state_bw,
-                ) = tf.nn.bidirectional_dynamic_rnn(  # TODO: keras.layers.Bidirectional(keras.layers.RNN(cell))
+                # (state_fw, state_bw)
+                _, gru_state = tf.nn.bidirectional_dynamic_rnn(  # TODO: keras.layers.Bidirectional(keras.layers.RNN(cell))
                     cell_fw=rnn_cell_fw,
                     cell_bw=rnn_cell_bw,
                     inputs=flat_paths,
                     dtype=tf.float32,
                     sequence_length=lengths,
                 )
-                final_rnn_state = tf.concat(
-                    [state_fw.h, state_bw.h], axis=-1
-                )  # (batch * max_contexts, rnn_size)
+                tf.print(gru_state)
+                print(gru_state)
+                final_rnn_state = gru_state  # tf.concat(
+                #    [state_fw.h, state_bw.h], axis=-1
+                # )  # (batch * max_contexts, rnn_size)
             else:
                 rnn_cell_fw = tf.nn.rnn_cell.LSTMCell(
                     self.config.RNN_SIZE / 2
@@ -1135,6 +1172,7 @@ class Model:
         output_file.write(throughput_message)
         # print(accuracy_message)
         print(throughput_message)
+
     def get_should_reuse_variables(self):
         if self.config.TRAIN_PATH:
             return True

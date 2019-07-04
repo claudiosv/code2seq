@@ -1,6 +1,6 @@
 import pickle
 from argparse import ArgumentParser
-
+from bpe import Encoder
 import numpy as np
 
 import common

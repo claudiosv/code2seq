@@ -24,13 +24,14 @@ class Config:
         config.EMBEDDINGS_DROPOUT_KEEP_PROB = 0.75  # dropout 0.25
         config.RNN_DROPOUT_KEEP_PROB = 0.5
         # recurrent dropout of 0.5 on the LSTM that encodes the AST paths.
-        config.BIRNN = False
+        config.BIRNN = True
         config.GRU = True
         config.RANDOM_CONTEXTS = True
         config.BEAM_WIDTH = 0
         config.USE_MOMENTUM = True
         config.NORM_OR_SCALE = True
         config.ATTENTION = "luong"  # "bahdanau"
+        config.SPARSE_CROSS_ENT = True
         return config
 
     def take_model_hyperparams_from(self, otherConfig):

@@ -21,10 +21,10 @@
 #   recommended to use a multi-core machine for the preprocessing 
 #   step and set this value to the number of cores.
 # PYTHON - python3 interpreter alias.
-TRAIN_DIR=my_training_dir
-VAL_DIR=my_val_dir
-TEST_DIR=my_test_dir
-DATASET_NAME=java-pico
+TRAIN_DIR=java-pico/training
+VAL_DIR=java-pico/validation
+TEST_DIR=java-pico/test
+DATASET_NAME=java-pico-bpe
 MAX_DATA_CONTEXTS=50
 MAX_CONTEXTS=10 #the number of sampled paths from each example (which we set to 200 in the final models).
 SUBTOKEN_VOCAB_SIZE=186277
@@ -67,6 +67,6 @@ ${PYTHON} preprocess.py --train_data ${TRAIN_DATA_FILE} --test_data ${TEST_DATA_
     
 # If all went well, the raw data files can be deleted, because preprocess.py creates new files 
 # with truncated and padded number of paths for each example.
-rm ${TRAIN_DATA_FILE} ${VAL_DATA_FILE} ${TEST_DATA_FILE} ${TARGET_HISTOGRAM_FILE} ${SOURCE_SUBTOKEN_HISTOGRAM} \
-  ${NODE_HISTOGRAM_FILE}
+# rm ${TRAIN_DATA_FILE} ${VAL_DATA_FILE} ${TEST_DATA_FILE} ${TARGET_HISTOGRAM_FILE} ${SOURCE_SUBTOKEN_HISTOGRAM} \
+  # ${NODE_HISTOGRAM_FILE}
 

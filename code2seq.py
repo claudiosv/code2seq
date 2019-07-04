@@ -1,4 +1,6 @@
 from argparse import ArgumentParser
+from comet_ml import Experiment
+import comet_ml
 
 from config import Config
 from interactive_predict import InteractivePredictor
@@ -73,6 +75,38 @@ if __name__ == "__main__":
     if args.predict:
         predictor = InteractivePredictor(config, model)
         predictor.predict()
+    # if args.optimize:
+    #     optimizer = comet_ml.Optimizer()
+    #     params = """
+    #     optimizer categorical {sgd,adam,RMSprop} [adam]
+    #     attention categorical {scaled_luong,luong,normalized_bahdanau,bahdanau}[luong]
+    #     EMBEDDINGS_DROPOUT_KEEP_PROB real [0,1] [0.75]
+    #     RNN_DROPOUT_KEEP_PROB real [0,1] [0.5]
+    #     BATCH_SIZE ordinal {16,32,64,128} [64]
+    #     RNN_SIZE ordinal {128,256,512} [256]
+    #     EMBEDDINGS_SIZE ordinal {64,128,256} [128]
+    #     DECODER_SIZE ordinal {160,320,400}
+    #     BIRNN categorical {true,false} [true]
+    #     architecture categorical {gru,lstm} [lstm]
+    #     """
+    #     optimizer.set_params(params)
+
+    #     i = 0
+    #     while True:
+    #         # 4. Get a suggestion
+    #         try:
+    #             suggestion = optimizer.get_suggestion()
+    #         except comet_ml.NoMoreSuggestionsAvailable:
+    #             # get_suggestion() will raise when no new suggestions
+    #             # are available
+    #             break
+    #         suggestion[key]
+    #         # Build model, train, and get score:
+    #         print("Trial:", i)
+
+    #         # 5. Report the score back, maximizes:
+    #         suggestion.report_score("accuracy", score)
+    #         i += 1
     if args.release and args.load_path:
         print("Started in release mode")
         model.evaluate(release=True)
