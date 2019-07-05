@@ -198,7 +198,7 @@ class Model:
                     #     self.experiment.log_metric("mem_use", sess.run(bytes_in_use))
                     
                     self.experiment.log_metric("loss", batch_loss)
-                    self.experiment.log_metric("learning_rate", self.sess.run(optimizer._lr))
+                    # self.experiment.log_metric("learning_rate", self.sess.run(optimizer._lr))
                     sum_loss += batch_loss  # aka train loss
 
                     if batch_num % self.num_batches_to_log == 0:
