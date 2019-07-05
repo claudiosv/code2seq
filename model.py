@@ -184,11 +184,11 @@ class Model:
                 while True:
                     # print("Trained %d batches" % batch_num)
                     batch_num += 1
-                    if batch_num >= 4600:
-                        print("End of batch!!")
-                        raise tf.errors.OutOfRangeError(
-                            tf.NodeDef.ExperimentalDebugInfo, None, "I'm fake!"
-                        )
+                    # if batch_num >= 4600:
+                    #     print("End of batch!!")
+                    #     raise tf.errors.OutOfRangeError(
+                    #         tf.NodeDef.ExperimentalDebugInfo, None, "I'm fake!"
+                    #     )
                     _, batch_loss = self.sess.run([optimizer, train_loss])
                     self.experiment.set_step(batch_num)
 
@@ -198,7 +198,7 @@ class Model:
                     #     self.experiment.log_metric("mem_use", sess.run(bytes_in_use))
                     
                     self.experiment.log_metric("loss", batch_loss)
-                    
+                    self.experiment.log_metric("learning_rate", self.sess.run(optimizer._lr))
                     sum_loss += batch_loss  # aka train loss
 
                     if batch_num % self.num_batches_to_log == 0:
