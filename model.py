@@ -19,8 +19,8 @@ class Model:
     num_batches_to_log = 100
 
     def __init__(self, config):
-        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "0"
-        tf.logging.set_verbosity(tf.logging.INFO)
+        # os.environ["TF_CPP_MIN_LOG_LEVEL"] = "0"
+        # tf.logging.set_verbosity(tf.logging.INFO)
         tf.random.set_random_seed(1234)
         self.experiment = Experiment(
             api_key="wRZBv07osQnjYfhIUGphpKpxH",
@@ -197,7 +197,8 @@ class Model:
                         bytes_in_use = BytesInUse()
                         bytes_limit = BytesLimit()
                     with tf.Session() as sess:
-                        self.experiment.log_metric("mem_use_percent", sess.run(bytes_in_use)/sess.run(bytes_limit))
+                        self.experiment.log_metric("mem_use", sess.run(bytes_in_use))
+                        self.experiment.log_metric("max_mem", sess.run(bytes_limit))
                     
                     self.experiment.log_metric("loss", batch_loss)
                     # self.experiment.log_metric("learning_rate", self.sess.run(optimizer._lr))
