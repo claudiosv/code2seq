@@ -7,6 +7,7 @@ import numpy as np
 import shutil
 import tensorflow as tf
 from tensorflow.contrib.memory_stats.python.ops.memory_stats_ops import BytesInUse
+from tensorflow.contrib.memory_stats.python.ops.memory_stats_ops import BytesLimit
 
 
 import reader
@@ -192,10 +193,11 @@ class Model:
                     _, batch_loss = self.sess.run([optimizer, train_loss])
                     self.experiment.set_step(batch_num)
 
-                    # with tf.device('/device:GPU:0'):  # Replace with device you are interested in
-                    #     bytes_in_use = BytesInUse()
-                    # with tf.Session() as sess:
-                    #     self.experiment.log_metric("mem_use", sess.run(bytes_in_use))
+                    with tf.device('/device:GPU:0'):  # Replace with device you are interested in
+                        bytes_in_use = BytesInUse()
+                        bytes_limit = BytesLimit()
+                    with tf.Session() as sess:
+                        self.experiment.log_metric("mem_use_percent", sess.run(bytes_in_use)/sess.run(bytes_limit))
                     
                     self.experiment.log_metric("loss", batch_loss)
                     # self.experiment.log_metric("learning_rate", self.sess.run(optimizer._lr))
@@ -255,6 +257,9 @@ class Model:
     def trace(self, sum_loss, batch_num, multi_batch_start_time):
         multi_batch_elapsed = time.time() - multi_batch_start_time
         avg_loss = sum_loss / (self.num_batches_to_log * self.config.BATCH_SIZE)
+        self.experiment.log_metric("throughput", self.config.BATCH_SIZE
+                * self.num_batches_to_log
+                / (multi_batch_elapsed if multi_batch_elapsed > 0 else 1), step=batch_num)
         print(
             "Average loss at batch %d: %f, \tthroughput: %d samples/sec"
             % (
