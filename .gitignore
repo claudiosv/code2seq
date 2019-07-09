@@ -10,3 +10,9 @@ data/
 models/
 Seq2seq-PyTorch/env/
 thesis/thesis/
+data/
+java-pico/
+java-small/
+tmp/
+java-small.*
+java-pico-bpe.*

@@ -34,7 +34,7 @@ class Common:
         return dict(sorted_histogram[:max_size])
 
     @staticmethod
-    def load_vocab_from_dict(word_to_count, add_values=[], max_size=None):
+    def load_vocab_from_dict(word_to_count, add_values=[], max_size=None, kind=None):
         word_to_index, index_to_word = {}, {}
         current_index = 0
         for value in add_values:
@@ -45,6 +45,10 @@ class Common:
             (k, word_to_count[k])
             for k in sorted(word_to_count, key=word_to_count.get, reverse=True)
         ]
+        with open('your_file_%s.txt'%kind, 'w') as f:
+            for item in sorted_counts:
+                f.write("%s" % item[0])
+                f.write(" %s\n" % item[1])
         limited_sorted = dict(sorted_counts[:max_size])
         for word, count in limited_sorted.items():
             word_to_index[word] = current_index

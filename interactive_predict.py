@@ -43,6 +43,9 @@ class InteractivePredictor:
                 predict_lines, pc_info_dict = self.path_extractor.extract_paths(
                     user_input
                 )
+                print(user_input)
+                print(predict_lines)
+                print(pc_info_dict)
             except ValueError:
                 continue
             model_results = self.model.predict(predict_lines)

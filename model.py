@@ -68,20 +68,29 @@ class Model:
                 subtoken_to_count,
                 add_values=[Common.PAD, Common.UNK],
                 max_size=config.SUBTOKENS_VOCAB_MAX_SIZE,
+                kind="subtoken"
             )
+            print("Subtoken to count %d" % len(subtoken_to_count))
+            print("target to count %d" % len(target_to_count))
+            print("node to count %d" % len(node_to_count))
+            print("test", node_to_count)
             print("Loaded subtoken vocab. size: %d" % self.subtoken_vocab_size)
+            
 
             self.target_to_index, self.index_to_target, self.target_vocab_size = Common.load_vocab_from_dict(
                 target_to_count,
                 add_values=[Common.PAD, Common.UNK, Common.SOS],
                 max_size=config.TARGET_VOCAB_MAX_SIZE,
+                kind="target"
             )
             print("Loaded target word vocab. size: %d" % self.target_vocab_size)
 
             self.node_to_index, self.index_to_node, self.nodes_vocab_size = Common.load_vocab_from_dict(
-                node_to_count, add_values=[Common.PAD, Common.UNK], max_size=None
+                node_to_count, add_values=[Common.PAD, Common.UNK], max_size=None,
+                kind="node"
             )
             print("Loaded nodes vocab. size: %d" % self.nodes_vocab_size)
+            exit()
             self.epochs_trained = 0
 
     def close_session(self):
