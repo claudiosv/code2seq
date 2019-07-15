@@ -43,7 +43,7 @@ def ExtractFeaturesForDir(args, dir, prefix):
         str(args.num_threads),
     ]
 
-    # print command
+    # print(command)
     # os.system(command)
     kill = lambda process: process.kill()
     outputFileName = TMP_DIR + prefix + dir.split("/")[-1]
@@ -125,7 +125,8 @@ if __name__ == "__main__":
             + " --file "
             + args.file
         )
-        os.system(command)
+        # os.system(command)
+        print(command)
     elif args.dir is not None:
         subdirs = get_immediate_subdirectories(args.dir)
         if len(subdirs) == 0:
