@@ -90,7 +90,7 @@ class Model:
                 kind="node"
             )
             print("Loaded nodes vocab. size: %d" % self.nodes_vocab_size)
-            exit()
+            # exit()
             self.epochs_trained = 0
 
     def close_session(self):
@@ -202,12 +202,12 @@ class Model:
                     _, batch_loss = self.sess.run([optimizer, train_loss])
                     self.experiment.set_step(batch_num)
 
-                    with tf.device('/device:GPU:0'):  # Replace with device you are interested in
-                        bytes_in_use = BytesInUse()
-                        bytes_limit = BytesLimit()
-                    with tf.Session() as sess:
-                        self.experiment.log_metric("mem_use", sess.run(bytes_in_use))
-                        self.experiment.log_metric("max_mem", sess.run(bytes_limit))
+                    # with tf.device('/device:GPU:0'):  # Replace with device you are interested in
+                    #     bytes_in_use = BytesInUse()
+                    #     bytes_limit = BytesLimit()
+                    # with tf.Session() as sess:
+                    #     self.experiment.log_metric("mem_use", sess.run(bytes_in_use))
+                    #     self.experiment.log_metric("max_mem", sess.run(bytes_limit))
                     
                     self.experiment.log_metric("loss", batch_loss)
                     # self.experiment.log_metric("learning_rate", self.sess.run(optimizer._lr))

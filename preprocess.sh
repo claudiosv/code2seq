@@ -40,42 +40,54 @@ EXTRACTOR_JAR=JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar
 
 mkdir -p data
 mkdir -p data/${DATASET_NAME}
-echo "data/${DATASET_NAME}/${TRAIN_DATA_FILE}"
-if test "$1" = "-bpe"; then
-    # composer install;
-    echo "BPE enabled!";
-    ${PYTHON} bpe.py -p "data/${DATASET_NAME}/${TRAIN_DATA_FILE}"
-fi
-exit 1
+# echo "data/${DATASET_NAME}/${TRAIN_DATA_FILE}"
+# if test "$1" = "-bpe"; then
+#     # composer install;
+#     echo "BPE enabled!";
+
 # echo "Extracting paths from validation set..."
 # ${PYTHON} JavaExtractor/extract.py --dir ${VAL_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} > ${VAL_DATA_FILE} 2>> error_log.txt
 # echo "Finished extracting paths from validation set"
 # echo "Extracting paths from test set..."
 # ${PYTHON} JavaExtractor/extract.py --dir ${TEST_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} > ${TEST_DATA_FILE} 2>> error_log.txt
 # echo "Finished extracting paths from test set"
-echo "Extracting paths from training set..."
+# echo "Extracting paths from training set..."
 # ${PYTHON} JavaExtractor/extract.py --dir ${TRAIN_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} | shuf > ${TRAIN_DATA_FILE} 2>> error_log.txt
-echo "Finished extracting paths from training set"
+# echo "Finished extracting paths from training set"
 #java -Xmx100g -XX:MaxNewSize=60g -cp "JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar" JavaExtractor.App --max_path_length 8 --max_path_width 2 --dir "java-pico/test/hadoop" --num_threads 1 > hadoop_extr1.txt
 #java -Xmx100g -XX:MaxNewSize=60g -cp "JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar" JavaExtractor.App --max_path_length 8 --max_path_width 2 --dir "java-pico/test/hadoop" --num_threads 1 > hadoop_extr.txt
-# TARGET_HISTOGRAM_FILE=data/${DATASET_NAME}/${DATASET_NAME}.histo.tgt.c2s
+echo "Preprocessing training dataset with BPE..."
+${PYTHON} bpe.py -p ${TRAIN_DATA_FILE}
+echo "Finished encoding training dataset..."
+echo "Preprocessing validation dataset with BPE..."
+${PYTHON} bpe.py -p ${VAL_DATA_FILE}
+echo "Finished encoding validation dataset..."
+echo "Preprocessing test dataset with BPE..."
+${PYTHON} bpe.py -p ${TEST_DATA_FILE}
+echo "Finished encoding test dataset..."
+
+TRAIN_DATA_FILE=bpe_${DATASET_NAME}.train.raw.txt
+VAL_DATA_FILE=bpe_${DATASET_NAME}.val.raw.txt
+TEST_DATA_FILE=bpe_${DATASET_NAME}.test.raw.txt
+
+TARGET_HISTOGRAM_FILE=data/${DATASET_NAME}/${DATASET_NAME}.histo.tgt.c2s
 SOURCE_SUBTOKEN_HISTOGRAM=data/${DATASET_NAME}/${DATASET_NAME}.histo.ori.c2s
-# NODE_HISTOGRAM_FILE=data/${DATASET_NAME}/${DATASET_NAME}.histo.node.c2s
+NODE_HISTOGRAM_FILE=data/${DATASET_NAME}/${DATASET_NAME}.histo.node.c2s
 
 echo "Creating histograms from the training data"
-# cat ${TRAIN_DATA_FILE} | cut -d' ' -f1 | tr '|' '\n' | awk '{n[$0]++} END {for (i in n) print i,n[i]}' > ${TARGET_HISTOGRAM_FILE}
-cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- > cut_trainingdata.txt
-cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' > cut_trainingdata_trans.txt
-cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' | cut -d',' -f1,3 > cut_trainingdata_trans_cut.txt
-cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' | cut -d',' -f1,3 | tr ',|' '\n' > cut_trainingdata_trans_cut_trans.txt
+cat ${TRAIN_DATA_FILE} | cut -d' ' -f1 | tr '|' '\n' | awk '{n[$0]++} END {for (i in n) print i,n[i]}' > ${TARGET_HISTOGRAM_FILE}
+# cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- > cut_trainingdata.txt
+# cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' > cut_trainingdata_trans.txt
+# cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' | cut -d',' -f1,3 > cut_trainingdata_trans_cut.txt
+# cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' | cut -d',' -f1,3 | tr ',|' '\n' > cut_trainingdata_trans_cut_trans.txt
 cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' | cut -d',' -f1,3 | tr ',|' '\n' | awk '{n[$0]++} END {for (i in n) print i,n[i]}' > ${SOURCE_SUBTOKEN_HISTOGRAM}
-# cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' | cut -d',' -f2 | tr '|' '\n' | awk '{n[$0]++} END {for (i in n) print i,n[i]}' > ${NODE_HISTOGRAM_FILE}
+cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' | cut -d',' -f2 | tr '|' '\n' | awk '{n[$0]++} END {for (i in n) print i,n[i]}' > ${NODE_HISTOGRAM_FILE}
 
 
-# ${PYTHON} preprocess.py --train_data ${TRAIN_DATA_FILE} --test_data ${TEST_DATA_FILE} --val_data ${VAL_DATA_FILE} \
-  # --max_contexts ${MAX_CONTEXTS} --max_data_contexts ${MAX_DATA_CONTEXTS} --subtoken_vocab_size ${SUBTOKEN_VOCAB_SIZE} \
-  # --target_vocab_size ${TARGET_VOCAB_SIZE} --subtoken_histogram ${SOURCE_SUBTOKEN_HISTOGRAM} \
-  # --node_histogram ${NODE_HISTOGRAM_FILE} --target_histogram ${TARGET_HISTOGRAM_FILE} --output_name data/${DATASET_NAME}/${DATASET_NAME}
+${PYTHON} preprocess.py --train_data ${TRAIN_DATA_FILE} --test_data ${TEST_DATA_FILE} --val_data ${VAL_DATA_FILE} \
+  --max_contexts ${MAX_CONTEXTS} --max_data_contexts ${MAX_DATA_CONTEXTS} --subtoken_vocab_size ${SUBTOKEN_VOCAB_SIZE} \
+  --target_vocab_size ${TARGET_VOCAB_SIZE} --subtoken_histogram ${SOURCE_SUBTOKEN_HISTOGRAM} \
+  --node_histogram ${NODE_HISTOGRAM_FILE} --target_histogram ${TARGET_HISTOGRAM_FILE} --output_name data/${DATASET_NAME}/${DATASET_NAME}
     
 # If all went well, the raw data files can be deleted, because preprocess.py creates new files 
 # with truncated and padded number of paths for each example.

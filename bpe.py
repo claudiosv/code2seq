@@ -1,25 +1,40 @@
 import os
 import sys
-import dataprep.api.text as pp
+import dataprep.bpepkg.bpe_encode as bpe_encode
+from dataprep.bpepkg.merge import MergeList, read_merges
+
+
+def filterJunk(token):
+    junk = ["`w", "w`", "[", "]", "{", "}", "|"]
+
+    if token in junk:
+        return False
+    else:
+        return True
 
 
 def main():
     filepath = sys.argv[2]
-
+    merges = read_merges(
+        "/Users/claudio/Projects/dataprep/dataprep/data/bpe/case/1k/merges.txt"
+    )
     if not os.path.isfile(filepath):
         print("File path {} does not exist. Exiting...".format(filepath))
         sys.exit()
 
     # bag_of_words = {}
     cnt = 0
-    with open(filepath) as fp, open(filepath + ".bpe.txt", "w") as writer:
+    with open(filepath) as fp, open("bpe_" + filepath, "w") as writer:
         for line in fp:
             # print("line {} contents {}".format(cnt, line))
             split_line = line.split(" ")
             # apply BPE to split_line[0]
-            bpe_1 = pp.bpe(split_line[0], bpe_codes_id="1k")
-            print(bpe_1)
-            split_line[0] = "|".join(bpe_1)
+            bpe_1 = bpe_encode.encode_word(
+                split_line[0], merges
+            )  # pp.bpe(split_line[0], bpe_codes_id="1k")
+            # print(bpe_1)
+            filtered_bpe_1 = list(filter(filterJunk, bpe_1))
+            split_line[0] = "|".join(filtered_bpe_1)
             contexts = []
             for i in range(1, len(split_line)):
                 # print(split_line[i])
@@ -30,24 +45,30 @@ def main():
 
                     # container|[{}]|does|not|exist|creating
                     # ['`w', 'contain', 'er', 'w`', '|', '[', '{', '}', ']', '|', '`w', 'do', 'es', 'w`', '|', 'not', '|', '`w', 'ex', 'ist', 'w`', '|', '`w', 'cre', 'at', 'ing', 'w`']
-
-                    bpe_2 = pp.bpe(path[0], bpe_codes_id="1k")
-                    if "[" in bpe_2 or "{" in bpe_2:
-                        print(path[0])
-                        print(bpe_2)
-                    path[0] = "|".join(bpe_2)
-                if path[len(path) - 1] != "<NUM>":
+                    bpe_2 = list(bpe_encode.encode_word(split_line[0], merges))
+                    # bpe_2 = pp.bpe(path[0], bpe_codes_id="1k")
+                    filtered_bpe_2 = list(filter(filterJunk, bpe_2))
+                    # print(filtered_bpe_2)
+                    # if "[" in bpe_2 or "{" in bpe_2:
+                    #     print(path[0])
+                    #     print(bpe_2)
+                    path[0] = "|".join(filtered_bpe_2)
+                if (
+                    path[len(path) - 1] != "METHOD_NAME"
+                    and path[len(path) - 1] != "<NUM>"
+                ):
                     # apply BPE
                     # print("Applying BPE to " + path[len(path) - 1])
-                    bpe_3 = pp.bpe(path[len(path) - 1], bpe_codes_id="1k")
-                    print(bpe_3)
-                    path[len(path) - 1] = "|".join(bpe_3)
+                    # bpe_3 = pp.bpe(path[len(path) - 1], bpe_codes_id="1k")
+                    bpe_3 = list(bpe_encode.encode_word(split_line[0], merges))
+                    filtered_bpe_3 = list(filter(filterJunk, bpe_3))
+                    path[len(path) - 1] = "|".join(filtered_bpe_3)
                 # print(",".join(path))
 
                 # print("\n\n")
                 contexts.append(",".join(path))
 
-            writer.write(split_line[0] + " " + " ".join(contexts))
+            writer.write(split_line[0] + " " + " ".join(contexts) + "\n")
 
             # record_word_cnt(line.strip().split(" "), bag_of_words)
             cnt += 1

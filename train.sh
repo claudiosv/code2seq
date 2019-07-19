@@ -5,9 +5,9 @@
 # test_data: by default, points to the validation set, since this is the set that
 #   will be evaluated after each training iteration. If you wish to test
 #   on the final (held-out) test set, change 'val' to 'test'.
-type=java-pico-model-bigru-bah-norm1
-dataset_name=java-small
-data_dir=data/java-small
+type=java-pico-model-bpe-test
+dataset_name=java-pico-bpe
+data_dir=data/java-pico-bpe
 data=${data_dir}/${dataset_name}
 test_data=${data_dir}/${dataset_name}.val.c2s
 model_dir=models/${type}
