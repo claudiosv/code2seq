@@ -1,11 +1,6 @@
 import pickle
 from argparse import ArgumentParser
-
-# from bpe import Encoder
-import dataprep.api.text as pp
-import dataprep.api.corpus as ppc
 import numpy as np
-
 import common
 
 """

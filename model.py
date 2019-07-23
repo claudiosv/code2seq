@@ -8,8 +8,6 @@ import shutil
 import tensorflow as tf
 from tensorflow.contrib.memory_stats.python.ops.memory_stats_ops import BytesInUse
 from tensorflow.contrib.memory_stats.python.ops.memory_stats_ops import BytesLimit
-
-
 import reader
 from common import Common
 
@@ -1148,7 +1146,7 @@ class Model:
         if self.config.GRU:
             print("Using GRUs, each of size:\t\t", self.config.RNN_SIZE // 2)
         else:
-            print("Using LSTM of size:\t\t", self.config.RNN_SIZE)
+            print("Using LSTM of size:\t\t\t", self.config.RNN_SIZE)
         print("Decoder size:\t\t\t\t", self.config.DECODER_SIZE)
         print("Decoder layers:\t\t\t\t", self.config.NUM_DECODER_LAYERS)
         print("Max path lengths:\t\t\t", self.config.MAX_PATH_LENGTH)

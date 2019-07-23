@@ -45,7 +45,7 @@ def main():
 
                     # container|[{}]|does|not|exist|creating
                     # ['`w', 'contain', 'er', 'w`', '|', '[', '{', '}', ']', '|', '`w', 'do', 'es', 'w`', '|', 'not', '|', '`w', 'ex', 'ist', 'w`', '|', '`w', 'cre', 'at', 'ing', 'w`']
-                    bpe_2 = list(bpe_encode.encode_word(split_line[0], merges))
+                    bpe_2 = list(bpe_encode.encode_word(path[0], merges))
                     # bpe_2 = pp.bpe(path[0], bpe_codes_id="1k")
                     filtered_bpe_2 = list(filter(filterJunk, bpe_2))
                     # print(filtered_bpe_2)
@@ -60,7 +60,7 @@ def main():
                     # apply BPE
                     # print("Applying BPE to " + path[len(path) - 1])
                     # bpe_3 = pp.bpe(path[len(path) - 1], bpe_codes_id="1k")
-                    bpe_3 = list(bpe_encode.encode_word(split_line[0], merges))
+                    bpe_3 = list(bpe_encode.encode_word(path[len(path) - 1].strip(), merges))
                     filtered_bpe_3 = list(filter(filterJunk, bpe_3))
                     path[len(path) - 1] = "|".join(filtered_bpe_3)
                 # print(",".join(path))
