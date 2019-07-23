@@ -176,11 +176,11 @@ class Model:
             try:
                 while True:
                     batch_num += 1
-                    if batch_num >= 200:
-                        print("End of batch!!")
-                        raise tf.errors.OutOfRangeError(
-                            tf.NodeDef.ExperimentalDebugInfo, None, "I'm fake!"
-                        )
+                    # if batch_num >= 200:
+                    #     print("End of batch!!")
+                    #     raise tf.errors.OutOfRangeError(
+                    #         tf.NodeDef.ExperimentalDebugInfo, None, "I'm fake!"
+                    #     )
                     _, batch_loss = self.sess.run([optimizer, train_loss])
                     self.experiment.set_step(batch_num)
                     self.experiment.log_metric("loss", batch_loss)

@@ -24,18 +24,18 @@
 TRAIN_DIR=java-pico/training
 VAL_DIR=java-pico/validation
 TEST_DIR=java-pico/test
-DATASET_NAME=java-pico-baseline
+DATASET_NAME=java-pico-test-full
 MAX_DATA_CONTEXTS=1000
 MAX_CONTEXTS=200 #the number of sampled paths from each example (which we set to 200 in the final models).
 SUBTOKEN_VOCAB_SIZE=186277
 TARGET_VOCAB_SIZE=26347
-NUM_THREADS=64
+NUM_THREADS=4
 PYTHON=python3
 APPLY_BPE=false
 EXTRACT_PATHS=false
 ###########################################################
 
-mkdir preprocessing
+mkdir -p preprocessing
 
 TRAIN_DATA_FILE=preprocessing/${DATASET_NAME}.train.raw.txt
 VAL_DATA_FILE=preprocessing/${DATASET_NAME}.val.raw.txt
@@ -46,15 +46,15 @@ mkdir -p data
 mkdir -p data/${DATASET_NAME}
 
 if [ "${EXTRACT_PATHS}" = true ]; then
-echo "Extracting paths from validation set..."
-${PYTHON} JavaExtractor/extract.py --dir ${VAL_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} >${VAL_DATA_FILE} 2>>error_log.txt
-echo "Finished extracting paths from validation set"
-echo "Extracting paths from test set..."
-${PYTHON} JavaExtractor/extract.py --dir ${TEST_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} >${TEST_DATA_FILE} 2>>error_log.txt
-echo "Finished extracting paths from test set"
-echo "Extracting paths from training set..."
-${PYTHON} JavaExtractor/extract.py --dir ${TRAIN_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} | shuf >${TRAIN_DATA_FILE} 2>>error_log.txt
-echo "Finished extracting paths from training set"
+  echo "Extracting paths from validation set..."
+  ${PYTHON} JavaExtractor/extract.py --dir ${VAL_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} >${VAL_DATA_FILE} 2>>error_log.txt
+  echo "Finished extracting paths from validation set"
+  echo "Extracting paths from test set..."
+  ${PYTHON} JavaExtractor/extract.py --dir ${TEST_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} >${TEST_DATA_FILE} 2>>error_log.txt
+  echo "Finished extracting paths from test set"
+  echo "Extracting paths from training set..."
+  ${PYTHON} JavaExtractor/extract.py --dir ${TRAIN_DIR} --max_path_length 8 --max_path_width 2 --num_threads ${NUM_THREADS} --jar ${EXTRACTOR_JAR} | shuf >${TRAIN_DATA_FILE} 2>>error_log.txt
+  echo "Finished extracting paths from training set"
 fi
 
 if [ "${APPLY_BPE}" = true ]; then
@@ -71,8 +71,6 @@ if [ "${APPLY_BPE}" = true ]; then
   VAL_DATA_FILE=preprocessing/${DATASET_NAME}.val.raw.txt.bpe.txt
   TEST_DATA_FILE=preprocessing/${DATASET_NAME}.test.raw.txt.bpe.txt
 fi
-
-
 
 
 TARGET_HISTOGRAM_FILE=data/${DATASET_NAME}/${DATASET_NAME}.histo.tgt.c2s

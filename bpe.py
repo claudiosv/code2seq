@@ -38,7 +38,6 @@ def main():
                 
                 if path[0] != "METHOD_NAME" and path[0] != "<NUM>" and len(path[0]) > 2:
                     bpe_2 = bpe_encode.encode_word(path[0], merges)
-                    # filtered_bpe_2 = list(filter(filterJunk, bpe_2))
                     path[0] = "|".join(bpe_2)
                     
                 if (
@@ -47,11 +46,11 @@ def main():
                     and len(path[len(path) - 1]) > 2
                 ):
                     bpe_3 = bpe_encode.encode_word(path[len(path) - 1].rstrip(), merges)
-                    # filtered_bpe_3 = list(filter(filterJunk, bpe_3))
                     path[len(path) - 1] = "|".join(bpe_3)
                 contexts.append(",".join(path))
 
             writer.write(split_line[0] + " " + " ".join(contexts) + "\n")
+            # writer.write(" ".join(split_line) + "\n")
 
             cnt += 1
     print("Num of lines {}".format(cnt))

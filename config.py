@@ -69,7 +69,7 @@ class Config:
         config.READER_NUM_PARALLEL_BATCHES = 1
         config.SHUFFLE_BUFFER_SIZE = 10000
         config.CSV_BUFFER_SIZE = 100 * 1024 * 1024  # 100 MB
-        config.MAX_CONTEXTS = 10
+        config.MAX_CONTEXTS = 200
         # 200  # the number of sampled paths from each example (which we set to 200 in the final models).
         config.SUBTOKENS_VOCAB_MAX_SIZE = 186277
         config.TARGET_VOCAB_MAX_SIZE = 26347
