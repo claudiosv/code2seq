@@ -69,10 +69,10 @@ class Config:
         config.READER_NUM_PARALLEL_BATCHES = 1
         config.SHUFFLE_BUFFER_SIZE = 10000
         config.CSV_BUFFER_SIZE = 100 * 1024 * 1024  # 100 MB
-        config.MAX_CONTEXTS = 30
+        config.MAX_CONTEXTS = 10
         # 200  # the number of sampled paths from each example (which we set to 200 in the final models).
-        config.SUBTOKENS_VOCAB_MAX_SIZE = 190000
-        config.TARGET_VOCAB_MAX_SIZE = 27000
+        config.SUBTOKENS_VOCAB_MAX_SIZE = 186277
+        config.TARGET_VOCAB_MAX_SIZE = 26347
         config.EMBEDDINGS_SIZE = 64  # 128  # dtokens = dnodes = dhidden = dtarget = 128
         config.RNN_SIZE = 64  # 128 * 2  # Two LSTMs to embed paths, each of size 128
         config.DECODER_SIZE = 160  # 320

@@ -24,6 +24,7 @@ class Model:
             api_key="wRZBv07osQnjYfhIUGphpKpxH",
             project_name="code2seq",
             workspace="cspiess",
+            disabled=True
         )
         
         self.config = config
@@ -71,7 +72,6 @@ class Model:
             print("Subtoken to count %d" % len(subtoken_to_count))
             print("target to count %d" % len(target_to_count))
             print("node to count %d" % len(node_to_count))
-            print("test", node_to_count)
             print("Loaded subtoken vocab. size: %d" % self.subtoken_vocab_size)
             
 
@@ -88,7 +88,6 @@ class Model:
                 kind="node"
             )
             print("Loaded nodes vocab. size: %d" % self.nodes_vocab_size)
-            # exit()
             self.epochs_trained = 0
 
     def close_session(self):
@@ -119,12 +118,6 @@ class Model:
         )
 
         self.print_hyperparams()
-        # print(
-        #     "Number of trainable params:",
-        #     np.sum(
-        #         [np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]
-        #     ),
-        # )
 
         self.initialize_session_variables(self.sess)
 
@@ -132,7 +125,6 @@ class Model:
         if self.config.LOAD_PATH:
             self.load_model(self.sess)
 
-        # time.sleep(1)
         print("Started reader...")
 
         multi_batch_start_time = time.time()
@@ -181,34 +173,17 @@ class Model:
             # for epoch in range(self.config.NUM_EPOCHS):
             self.queue_thread.reset(self.sess)
             print("Starting new epoch %d" % epoch)
-            # losses = []
-            # plt.plot(losses, '-b', label='Train loss')
-            # plt.plot(batch_num, '-r', label='Batch num')
-            # plt.legend(loc=0)
-            # plt.title('Loss')
-            # plt.xlabel('Iteration')
-            # plt.ylabel('Loss')
             try:
                 while True:
-                    # print("Trained %d batches" % batch_num)
                     batch_num += 1
-                    # if batch_num >= 4600:
-                    #     print("End of batch!!")
-                    #     raise tf.errors.OutOfRangeError(
-                    #         tf.NodeDef.ExperimentalDebugInfo, None, "I'm fake!"
-                    #     )
+                    if batch_num >= 200:
+                        print("End of batch!!")
+                        raise tf.errors.OutOfRangeError(
+                            tf.NodeDef.ExperimentalDebugInfo, None, "I'm fake!"
+                        )
                     _, batch_loss = self.sess.run([optimizer, train_loss])
                     self.experiment.set_step(batch_num)
-
-                    # with tf.device('/device:GPU:0'):  # Replace with device you are interested in
-                    #     bytes_in_use = BytesInUse()
-                    #     bytes_limit = BytesLimit()
-                    # with tf.Session() as sess:
-                    #     self.experiment.log_metric("mem_use", sess.run(bytes_in_use))
-                    #     self.experiment.log_metric("max_mem", sess.run(bytes_limit))
-                    
                     self.experiment.log_metric("loss", batch_loss)
-                    # self.experiment.log_metric("learning_rate", self.sess.run(optimizer._lr))
                     sum_loss += batch_loss  # aka train loss
 
                     if batch_num % self.num_batches_to_log == 0:
