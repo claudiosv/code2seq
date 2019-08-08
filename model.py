@@ -63,7 +63,7 @@ class Model:
             if self.config.DATA_NUM_CONTEXTS <= 0:
                 self.config.DATA_NUM_CONTEXTS = max_contexts
 
-            self.subtoken_to_index, self.index_to_subtoken, self.subtoken_vocab_size = Common.load_vocab_from_dict(
+            self.subtoken_to_index, self.index_to_subtoken, self.subtoken_vocab_size, _ = Common.load_vocab_from_dict(
                 subtoken_to_count,
                 add_values=[Common.PAD, Common.UNK],
                 max_size=config.SUBTOKENS_VOCAB_MAX_SIZE,
@@ -75,7 +75,7 @@ class Model:
             print("Loaded subtoken vocab. size: %d" % self.subtoken_vocab_size)
             
 
-            self.target_to_index, self.index_to_target, self.target_vocab_size = Common.load_vocab_from_dict(
+            self.target_to_index, self.index_to_target, self.target_vocab_size, _ = Common.load_vocab_from_dict(
                 target_to_count,
                 add_values=[Common.PAD, Common.UNK, Common.SOS],
                 max_size=config.TARGET_VOCAB_MAX_SIZE,
@@ -83,7 +83,7 @@ class Model:
             )
             print("Loaded target word vocab. size: %d" % self.target_vocab_size)
 
-            self.node_to_index, self.index_to_node, self.nodes_vocab_size = Common.load_vocab_from_dict(
+            self.node_to_index, self.index_to_node, self.nodes_vocab_size, _ = Common.load_vocab_from_dict(
                 node_to_count, add_values=[Common.PAD, Common.UNK], max_size=None,
                 kind="node"
             )
@@ -1085,10 +1085,14 @@ class Model:
         for original_name, predicted in results:
             if self.config.BEAM_WIDTH > 0:
                 predicted = predicted[0]
-            filtered_predicted_names = Common.filter_impossible_names(predicted)
-            filtered_original_subtokens = Common.filter_impossible_names(
-                original_name.split(Common.internal_delimiter)
-            )
+            if not self.config.PENALIZE_UNK:
+                filtered_predicted_names = Common.filter_impossible_names(predicted)
+                filtered_original_subtokens = Common.filter_impossible_names(
+                    original_name.split(Common.internal_delimiter)
+                )
+            else:
+                filtered_predicted_names = predicted
+                filtered_original_subtokens = original_name.split(Common.internal_delimiter)
 
             if "".join(filtered_original_subtokens) == "".join(
                 filtered_predicted_names

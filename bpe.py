@@ -3,6 +3,7 @@ import sys
 import dataprep.bpepkg.bpe_encode as bpe_encode
 from dataprep.bpepkg.merge import MergeList, read_merges
 from pathlib import Path
+from argparse import ArgumentParser
 
 
 def filterJunk(token):
@@ -15,16 +16,40 @@ def filterJunk(token):
 
 
 def main():
-    filepath = sys.argv[2]
-    merges = read_merges(
-        "/Users/claudio/Projects/dataprep/dataprep/data/bpe/case/1k/merges.txt"
-    )
 
-    if not os.path.isfile(filepath):
-        print("File path {} does not exist. Exiting...".format(filepath))
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-i",
+        "--input",
+        dest="input_filename",
+        help="File to read from",
+        metavar="INPUT_FILE",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        dest="output_filename",
+        help="File to write to",
+        metavar="OUTPUT_FILE",
+    )
+    parser.add_argument("-m", "--merges", dest="merges_file", help="Merges file")
+
+    args = parser.parse_args()
+
+    input_filename = args.input_filename
+    output_filename = args.output_filename
+
+    merges = read_merges(args.merges_file)
+
+    if not os.path.isfile(input_filename):
+        print("File path {} does not exist. Exiting...".format(input_filename))
         sys.exit()
+    if not os.path.isfile(output_filename):
+        print("File path {} does not exist. Exiting...".format(output_filename))
+        sys.exit()
+
     cnt = 0
-    with open(filepath) as fp, open(filepath + ".bpe.txt", "w") as writer:
+    with open(input_filename) as fp, open(output_filename, "w") as writer:
         for line in fp:
             line = line.rstrip()
             split_line = line.split(" ")
@@ -35,11 +60,11 @@ def main():
 
             for i in range(1, len(split_line)):
                 path = split_line[i].split(",")
-                
+
                 if path[0] != "METHOD_NAME" and path[0] != "<NUM>" and len(path[0]) > 2:
                     bpe_2 = bpe_encode.encode_word(path[0], merges)
                     path[0] = "|".join(bpe_2)
-                    
+
                 if (
                     path[len(path) - 1] != "METHOD_NAME"
                     and path[len(path) - 1] != "<NUM>"

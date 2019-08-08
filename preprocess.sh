@@ -21,18 +21,20 @@
 #   recommended to use a multi-core machine for the preprocessing
 #   step and set this value to the number of cores.
 # PYTHON - python3 interpreter alias.
-TRAIN_DIR=java-pico/training
-VAL_DIR=java-pico/validation
-TEST_DIR=java-pico/test
-DATASET_NAME=java-pico-test-full
+TRAIN_DIR=java-small/training
+VAL_DIR=java-small/validation
+TEST_DIR=java-small/test
+DATASET_NAME=java-small
+BPE_DATASET_NAME=java-small-bpe-5k-nocase
 MAX_DATA_CONTEXTS=1000
 MAX_CONTEXTS=200 #the number of sampled paths from each example (which we set to 200 in the final models).
 SUBTOKEN_VOCAB_SIZE=186277
 TARGET_VOCAB_SIZE=26347
-NUM_THREADS=4
+NUM_THREADS=16
 PYTHON=python3
-APPLY_BPE=false
-EXTRACT_PATHS=false
+APPLY_BPE=true
+EXTRACT_PATHS=true
+BPE_MERGES=dataprep/dataprep/data/bpe/nocase/5k/merges.txt
 ###########################################################
 
 mkdir -p preprocessing
@@ -40,10 +42,15 @@ mkdir -p preprocessing
 TRAIN_DATA_FILE=preprocessing/${DATASET_NAME}.train.raw.txt
 VAL_DATA_FILE=preprocessing/${DATASET_NAME}.val.raw.txt
 TEST_DATA_FILE=preprocessing/${DATASET_NAME}.test.raw.txt
+
+BPE_TRAIN_DATA_FILE=preprocessing/${BPE_DATASET_NAME}.train.raw.txt
+BPE_VAL_DATA_FILE=preprocessing/${BPE_DATASET_NAME}.val.raw.txt
+BPE_TEST_DATA_FILE=preprocessing/${BPE_DATASET_NAME}.test.raw.txt
 EXTRACTOR_JAR=JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar
 
 mkdir -p data
 mkdir -p data/${DATASET_NAME}
+mkdir -p data/${BPE_DATASET_NAME}
 
 if [ "${EXTRACT_PATHS}" = true ]; then
   echo "Extracting paths from validation set..."
@@ -59,23 +66,22 @@ fi
 
 if [ "${APPLY_BPE}" = true ]; then
   echo "Preprocessing training dataset with BPE..."
-  ${PYTHON} bpe.py -p ${TRAIN_DATA_FILE}
+  ${PYTHON} bpe.py -i ${TRAIN_DATA_FILE} -o ${BPE_TRAIN_DATA_FILE} -m ${BPE_MERGES}
   echo "Finished encoding training dataset..."
   echo "Preprocessing validation dataset with BPE..."
-  ${PYTHON} bpe.py -p ${VAL_DATA_FILE}
+  ${PYTHON} bpe.py -i ${VAL_DATA_FILE} -o ${BPE_VAL_DATA_FILE} -m ${BPE_MERGES}
   echo "Finished encoding validation dataset..."
   echo "Preprocessing test dataset with BPE..."
-  ${PYTHON} bpe.py -p ${TEST_DATA_FILE}
+  ${PYTHON} bpe.py -i ${TEST_DATA_FILE} -o ${BPE_TEST_DATA_FILE} -m ${BPE_MERGES}
   echo "Finished encoding test dataset..."
-  TRAIN_DATA_FILE=preprocessing/${DATASET_NAME}.train.raw.txt.bpe.txt
-  VAL_DATA_FILE=preprocessing/${DATASET_NAME}.val.raw.txt.bpe.txt
-  TEST_DATA_FILE=preprocessing/${DATASET_NAME}.test.raw.txt.bpe.txt
+  TRAIN_DATA_FILE=${BPE_TRAIN_DATA_FILE}
+  VAL_DATA_FILE=${BPE_VAL_DATA_FILE}
+  TEST_DATA_FILE=${BPE_TEST_DATA_FILE}
 fi
 
-
-TARGET_HISTOGRAM_FILE=data/${DATASET_NAME}/${DATASET_NAME}.histo.tgt.c2s
-SOURCE_SUBTOKEN_HISTOGRAM=data/${DATASET_NAME}/${DATASET_NAME}.histo.ori.c2s
-NODE_HISTOGRAM_FILE=data/${DATASET_NAME}/${DATASET_NAME}.histo.node.c2s
+TARGET_HISTOGRAM_FILE=data/${BPE_DATASET_NAME}/${BPE_DATASET_NAME}.histo.tgt.c2s
+SOURCE_SUBTOKEN_HISTOGRAM=data/${BPE_DATASET_NAME}/${BPE_DATASET_NAME}.histo.ori.c2s
+NODE_HISTOGRAM_FILE=data/${BPE_DATASET_NAME}/${BPE_DATASET_NAME}.histo.node.c2s
 
 echo "Creating histograms from the training data"
 cat ${TRAIN_DATA_FILE} | cut -d' ' -f1 | tr '|' '\n' | awk '{n[$0]++} END {for (i in n) print i,n[i]}' >${TARGET_HISTOGRAM_FILE}
@@ -85,4 +91,4 @@ cat ${TRAIN_DATA_FILE} | cut -d' ' -f2- | tr ' ' '\n' | cut -d',' -f2 | tr '|' '
 ${PYTHON} preprocess.py --train_data ${TRAIN_DATA_FILE} --test_data ${TEST_DATA_FILE} --val_data ${VAL_DATA_FILE} \
   --max_contexts ${MAX_CONTEXTS} --max_data_contexts ${MAX_DATA_CONTEXTS} --subtoken_vocab_size ${SUBTOKEN_VOCAB_SIZE} \
   --target_vocab_size ${TARGET_VOCAB_SIZE} --subtoken_histogram ${SOURCE_SUBTOKEN_HISTOGRAM} \
-  --node_histogram ${NODE_HISTOGRAM_FILE} --target_histogram ${TARGET_HISTOGRAM_FILE} --output_name data/${DATASET_NAME}/${DATASET_NAME}
+  --node_histogram ${NODE_HISTOGRAM_FILE} --target_histogram ${TARGET_HISTOGRAM_FILE} --output_name data/${BPE_DATASET_NAME}/${BPE_DATASET_NAME}

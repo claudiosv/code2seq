@@ -223,3 +223,7 @@ The C# dataset used in the Code Captioning task can be downloaded from the [Code
 Run extractor with token splitting
 Run extractor without token splitting
 Do a dry run of BPE
+
+mvn compile && mvn install
+
+ JavaExtractor/extract.py --dir java-small/training/cassandra --max_path_length 8 --max_path_width 2 --num_threads 1 --jar JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar

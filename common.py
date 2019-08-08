@@ -2,7 +2,6 @@ import re
 import subprocess
 import sys
 
-
 class Common:
     internal_delimiter = "|"
     SOS = "<S>"
@@ -45,16 +44,12 @@ class Common:
             (k, word_to_count[k])
             for k in sorted(word_to_count, key=word_to_count.get, reverse=True)
         ]
-        with open('your_file_%s.txt'%kind, 'w') as f:
-            for item in sorted_counts:
-                f.write("%s" % item[0])
-                f.write(" %s\n" % item[1])
         limited_sorted = dict(sorted_counts[:max_size])
         for word, count in limited_sorted.items():
             word_to_index[word] = current_index
             index_to_word[current_index] = word
             current_index += 1
-        return word_to_index, index_to_word, current_index
+        return word_to_index, index_to_word, current_index, sorted_counts
 
     @staticmethod
     def binary_to_string(binary_string):
