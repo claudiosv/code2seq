@@ -43,6 +43,14 @@ if __name__ == "__main__":
         required=False,
     )
     parser.add_argument(
+        "-c",
+        "--config",
+        dest="config_path",
+        help="path to config file",
+        metavar="FILE",
+        required=False,
+    )
+    parser.add_argument(
         "--release",
         action="store_true",
         help="if specified and loading a trained model, release the loaded model for a smaller model "
@@ -55,7 +63,12 @@ if __name__ == "__main__":
     if args.debug:
         config = Config.get_debug_config(args)
     else:
-        config = Config.get_default_config(args)
+        if args.config_path:
+            with open(args.config_path, 'r') as f:
+                config = Config.get_config_json(args, f)
+                print("Successfully loaded config from " + str(args.config_path))
+        else:
+            config = Config.get_default_config(args)
 
     model = Model(config)
     print("Created model")
@@ -75,38 +88,6 @@ if __name__ == "__main__":
     if args.predict:
         predictor = InteractivePredictor(config, model)
         predictor.predict()
-    # if args.optimize:
-    #     optimizer = comet_ml.Optimizer()
-    #     params = """
-    #     optimizer categorical {sgd,adam,RMSprop} [adam]
-    #     attention categorical {scaled_luong,luong,normalized_bahdanau,bahdanau}[luong]
-    #     EMBEDDINGS_DROPOUT_KEEP_PROB real [0,1] [0.75]
-    #     RNN_DROPOUT_KEEP_PROB real [0,1] [0.5]
-    #     BATCH_SIZE ordinal {16,32,64,128} [64]
-    #     RNN_SIZE ordinal {128,256,512} [256]
-    #     EMBEDDINGS_SIZE ordinal {64,128,256} [128]
-    #     DECODER_SIZE ordinal {160,320,400}
-    #     BIRNN categorical {true,false} [true]
-    #     architecture categorical {gru,lstm} [lstm]
-    #     """
-    #     optimizer.set_params(params)
-
-    #     i = 0
-    #     while True:
-    #         # 4. Get a suggestion
-    #         try:
-    #             suggestion = optimizer.get_suggestion()
-    #         except comet_ml.NoMoreSuggestionsAvailable:
-    #             # get_suggestion() will raise when no new suggestions
-    #             # are available
-    #             break
-    #         suggestion[key]
-    #         # Build model, train, and get score:
-    #         print("Trial:", i)
-
-    #         # 5. Report the score back, maximizes:
-    #         suggestion.report_score("accuracy", score)
-    #         i += 1
     if args.release and args.load_path:
         print("Started in release mode")
         model.evaluate(release=True)

@@ -126,7 +126,7 @@ if __name__ == "__main__":
             + args.file
         )
         # os.system(command)
-        print(command)
+        # print(command)
     elif args.dir is not None:
         subdirs = get_immediate_subdirectories(args.dir)
         if len(subdirs) == 0:

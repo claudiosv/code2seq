@@ -5,13 +5,14 @@
 # test_data: by default, points to the validation set, since this is the set that
 #   will be evaluated after each training iteration. If you wish to test
 #   on the final (held-out) test set, change 'val' to 'test'.
-type=java-pico-test-full
+type=java-pico-test-full1
 dataset_name=java-pico-test-full
 data_dir=data/java-pico-test-full
 data=${data_dir}/${dataset_name}
 test_data=${data_dir}/${dataset_name}.val.c2s
 model_dir=models/${type}
+config=config.json
 
 mkdir -p ${model_dir}
 set -e
-python3 -u code2seq.py --data ${data} --test ${test_data} --save_prefix ${model_dir}/model
+python3 -u code2seq.py --data ${data} --test ${test_data} --save_prefix ${model_dir}/model --config ${config}

@@ -44,9 +44,6 @@ def main():
     if not os.path.isfile(input_filename):
         print("File path {} does not exist. Exiting...".format(input_filename))
         sys.exit()
-    if not os.path.isfile(output_filename):
-        print("File path {} does not exist. Exiting...".format(output_filename))
-        sys.exit()
 
     cnt = 0
     with open(input_filename) as fp, open(output_filename, "w") as writer:

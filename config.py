@@ -1,3 +1,5 @@
+import json
+
 class Config:
     @staticmethod
     def get_default_config(args):
@@ -33,6 +35,43 @@ class Config:
         config.ATTENTION = "luong"  # "bahdanau"
         config.SPARSE_CROSS_ENT = True
         config.PENALIZE_UNK = False
+        return config
+
+    @staticmethod
+    def get_config_json(args, jsonConfig):
+        otherConfig = json.load(jsonConfig)
+        config = Config(args)
+        config.NUM_EPOCHS = otherConfig["NUM_EPOCHS"]  # 3000
+        config.SAVE_EVERY_EPOCHS = otherConfig["SAVE_EVERY_EPOCHS"] 
+        config.PATIENCE = otherConfig["PATIENCE"] 
+        config.BATCH_SIZE = otherConfig["BATCH_SIZE"] 
+        config.TEST_BATCH_SIZE = otherConfig["TEST_BATCH_SIZE"] 
+        config.READER_NUM_PARALLEL_BATCHES = otherConfig["READER_NUM_PARALLEL_BATCHES"] 
+        config.SHUFFLE_BUFFER_SIZE = otherConfig["SHUFFLE_BUFFER_SIZE"] 
+        config.CSV_BUFFER_SIZE = otherConfig["CSV_BUFFER_SIZE"] 
+        config.MAX_CONTEXTS = otherConfig["MAX_CONTEXTS"] 
+        # 200  # the number of sampled paths from each example (which we set to 200 in the final models).
+        config.SUBTOKENS_VOCAB_MAX_SIZE = otherConfig["SUBTOKENS_VOCAB_MAX_SIZE"] 
+        config.TARGET_VOCAB_MAX_SIZE = otherConfig["TARGET_VOCAB_MAX_SIZE"] 
+        config.EMBEDDINGS_SIZE = otherConfig["EMBEDDINGS_SIZE"] 
+        config.RNN_SIZE = otherConfig["RNN_SIZE"] 
+        config.DECODER_SIZE = otherConfig["DECODER_SIZE"] 
+        config.NUM_DECODER_LAYERS = otherConfig["NUM_DECODER_LAYERS"] 
+        config.MAX_PATH_LENGTH = otherConfig["MAX_PATH_LENGTH"] 
+        config.MAX_NAME_PARTS = otherConfig["MAX_NAME_PARTS"] 
+        config.MAX_TARGET_PARTS = otherConfig["MAX_TARGET_PARTS"] 
+        config.EMBEDDINGS_DROPOUT_KEEP_PROB = otherConfig["EMBEDDINGS_DROPOUT_KEEP_PROB"] 
+        config.RNN_DROPOUT_KEEP_PROB = otherConfig["RNN_DROPOUT_KEEP_PROB"] 
+        # recurrent dropout of 0.5 on the LSTM that encodes the AST paths.
+        config.BIRNN = otherConfig["BIRNN"] 
+        config.GRU = otherConfig["GRU"] 
+        config.RANDOM_CONTEXTS = otherConfig["RANDOM_CONTEXTS"] 
+        config.BEAM_WIDTH = otherConfig["BEAM_WIDTH"] 
+        config.USE_MOMENTUM = otherConfig["USE_MOMENTUM"] 
+        config.NORM_OR_SCALE = otherConfig["NORM_OR_SCALE"] 
+        config.ATTENTION = otherConfig["ATTENTION"] 
+        config.SPARSE_CROSS_ENT = otherConfig["SPARSE_CROSS_ENT"] 
+        config.PENALIZE_UNK = otherConfig["PENALIZE_UNK"] 
         return config
 
     def take_model_hyperparams_from(self, otherConfig):

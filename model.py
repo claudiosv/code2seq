@@ -554,8 +554,8 @@ class Model:
                     dtype=tf.float32,
                     sequence_length=lengths,
                 )
-                tf.print(gru_state)
-                print(gru_state)
+                # tf.print(gru_state)
+                # print(gru_state)
                 final_rnn_state = gru_state  # tf.concat(
                 #    [state_fw.h, state_bw.h], axis=-1
                 # )  # (batch * max_contexts, rnn_size)
@@ -599,7 +599,7 @@ class Model:
                     dtype=tf.float32,
                     sequence_length=lengths,
                 )
-                print(state)
+                # print(state)
                 final_rnn_state = state  # (batch * max_contexts, rnn_size)
             else:
                 rnn_cell = tf.nn.rnn_cell.LSTMCell(
@@ -1085,14 +1085,14 @@ class Model:
         for original_name, predicted in results:
             if self.config.BEAM_WIDTH > 0:
                 predicted = predicted[0]
-            if not self.config.PENALIZE_UNK:
+            if self.config.PENALIZE_UNK:
+                filtered_predicted_names = predicted
+                filtered_original_subtokens = original_name.split(Common.internal_delimiter)
+            else:
                 filtered_predicted_names = Common.filter_impossible_names(predicted)
                 filtered_original_subtokens = Common.filter_impossible_names(
                     original_name.split(Common.internal_delimiter)
                 )
-            else:
-                filtered_predicted_names = predicted
-                filtered_original_subtokens = original_name.split(Common.internal_delimiter)
 
             if "".join(filtered_original_subtokens) == "".join(
                 filtered_predicted_names
