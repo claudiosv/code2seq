@@ -164,6 +164,9 @@ class Model:
                 "USE_MOMENTUM": self.config.USE_MOMENTUM,
                 "RELEASE": self.config.RELEASE,
                 "ATTENTION": self.config.ATTENTION,
+                "NORM_OR_SCALE": self.config.NORM_OR_SCALE,
+                "SPARSE_CROSS_ENT": self.config.SPARSE_CROSS_ENT,
+                "PENALIZE_UNK": self.config.PENALIZE_UNK
             }
         )
 
