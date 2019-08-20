@@ -1,0 +1,1 @@
+Successfully loaded config from configs/java-small-beam.json

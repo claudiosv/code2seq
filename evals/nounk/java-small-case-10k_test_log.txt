@@ -1,0 +1,12 @@
+Successfully loaded config from configs/java-small-high-maxparts.json
+Loading dictionaries from: models/java-small-case-10k/model_iter8
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Prediction throughput: 947
+Prediction throughput: 937
+Done testing, epoch reached
+Evaluation time: 0h1m3s
+Accuracy: 0.12394899103139013
+Precision: 0.06420105355575066, recall: 0.2836492567843993, F1: 0.10470354968524614

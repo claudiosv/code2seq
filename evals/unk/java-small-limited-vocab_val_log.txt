@@ -1,0 +1,10 @@
+Successfully loaded config from configs/java-small-limited-vocab.json
+Loading dictionaries from: models/java-small-limited-vocab/model_iter15
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Done testing, epoch reached
+Evaluation time: 0h0m21s
+Accuracy: 0.16305988928032208
+Precision: 0.6144667576525639, recall: 0.2879909351755396, F1: 0.3921754062865534

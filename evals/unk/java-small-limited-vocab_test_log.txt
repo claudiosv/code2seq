@@ -1,0 +1,12 @@
+Successfully loaded config from configs/java-small-limited-vocab.json
+Loading dictionaries from: models/java-small-limited-vocab/model_iter15
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Prediction throughput: 1229
+Prediction throughput: 1249
+Done testing, epoch reached
+Evaluation time: 0h0m48s
+Accuracy: 0.1397141255605381
+Precision: 0.6172493887530562, recall: 0.32869390863935527, F1: 0.428960413914388

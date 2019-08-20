@@ -1,0 +1,10 @@
+Successfully loaded config from configs/java-small-high-maxparts.json
+Loading dictionaries from: models/java-small-case-10k/model_iter8
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Done testing, epoch reached
+Evaluation time: 0h0m29s
+Accuracy: 0.14750041939271935
+Precision: 0.047040206169513696, recall: 0.29799748452489583, F1: 0.08125409767168193

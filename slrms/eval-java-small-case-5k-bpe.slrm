@@ -1,0 +1,17 @@
+#!/bin/bash
+#  usage: sbatch ./gpu_test.scrpt          
+#
+#SBATCH -J train-java-small-nocase-10k     
+#SBATCH -N 1
+#SBATCH --partition mem_0064         
+#SBATCH --qos normal_0064
+#SBATCH --gres gpu:1
+#SBATCH --account=cspiess
+
+module purge
+module load cuda/10.0.130
+cd ~/code2seq/
+dataset=java-small-nocase-10k
+model_iter=1
+python3 code2seq.py --load models/${dataset}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > ${dataset}_test_log.txt
+python3 code2seq.py --load models/${dataset}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > ${dataset}_val_log.txt

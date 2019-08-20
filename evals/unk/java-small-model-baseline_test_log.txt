@@ -1,0 +1,12 @@
+Successfully loaded config from configs/java-small-baseline.json
+Loading dictionaries from: models/java-small-model-baseline/model_iter20
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Prediction throughput: 1179
+Prediction throughput: 1193
+Done testing, epoch reached
+Evaluation time: 0h0m50s
+Accuracy: 0.1646931053811659
+Precision: 0.5016812261687233, recall: 0.3849645626188449, F1: 0.43564069496167274

@@ -1,0 +1,12 @@
+Successfully loaded config from configs/java-small-bahdanau_norm.json
+Loading dictionaries from: models/java-small-bahdanau_norm/model_iter9
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Prediction throughput: 1143
+Prediction throughput: 1165
+Done testing, epoch reached
+Evaluation time: 0h0m51s
+Accuracy: 0.15458590246636772
+Precision: 0.16591282894736842, recall: 0.3716753022452504, F1: 0.2294161543655165

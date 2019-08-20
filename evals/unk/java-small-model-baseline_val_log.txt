@@ -1,0 +1,10 @@
+Successfully loaded config from configs/java-small-baseline.json
+Loading dictionaries from: models/java-small-model-baseline/model_iter20
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Done testing, epoch reached
+Evaluation time: 0h0m22s
+Accuracy: 0.20378292232846837
+Precision: 0.4877857850021873, recall: 0.3799906733149191, F1: 0.42719307973827214

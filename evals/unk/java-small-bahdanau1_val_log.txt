@@ -1,0 +1,10 @@
+Successfully loaded config from configs/java-small-bahdanau1.json
+Loading dictionaries from: models/java-small-bahdanau1/model_iter9
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Done testing, epoch reached
+Evaluation time: 0h0m22s
+Accuracy: 0.1953531286696863
+Precision: 0.5078957991973594, recall: 0.3832906220318632, F1: 0.43688209821063806

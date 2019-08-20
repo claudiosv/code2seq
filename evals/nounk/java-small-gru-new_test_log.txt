@@ -1,0 +1,12 @@
+Successfully loaded config from configs/java-small-gru-new.json
+Loading dictionaries from: models/java-small-gru-new/model_iter14
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Prediction throughput: 1300
+Prediction throughput: 1341
+Done testing, epoch reached
+Evaluation time: 0h0m44s
+Accuracy: 0.13470431614349776
+Precision: 0.15038089412811387, recall: 0.34852956337955565, F1: 0.2101065895989683
