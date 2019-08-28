@@ -1,0 +1,39 @@
+  Loading cuda/9.0.176 from: /opt/sw/x86_64/glibc-2.17/ivybridge-ep/cuda/9.0.176/
+Sun Aug 18 00:51:08 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 387.34                 Driver Version: 387.34                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 1080    Off  | 00000000:02:00.0 Off |                  N/A |
+|  0%   28C    P0    37W / 180W |      0MiB /  8113MiB |      1%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Successfully loaded config from configs/java-small-high-maxparts.json
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/22f604c31fea4bc7aa6a3f0d05ebd178
+
+Traceback (most recent call last):
+  File "code2seq.py", line 73, in <module>
+    model = Model(config)
+  File "/home/lv71161/cspiess/code2seq/model.py", line 55, in __init__
+    with open("{}.dict.c2s".format(config.TRAIN_PATH), "rb") as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/java-small-nocase-10k/java-small-nocase-10k.dict.c2s'
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/22f604c31fea4bc7aa6a3f0d05ebd178
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (0.0, 0.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)

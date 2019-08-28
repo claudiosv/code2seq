@@ -1,0 +1,370 @@
+  Loading cuda/9.0.176 from: /opt/sw/x86_64/glibc-2.17/ivybridge-ep/cuda/9.0.176/
+Mon Aug 19 17:40:33 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 387.34                 Driver Version: 387.34                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 1080    Off  | 00000000:02:00.0 Off |                  N/A |
+|  0%   33C    P0    37W / 180W |      0MiB /  8113MiB |      2%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/5bafdeebd6dc4355b4caab8d0f9f2bc6
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/5bafdeebd6dc4355b4caab8d0f9f2bc6
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory [3]    : (380174336.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization [3]: (2.0, 98.0)
+COMET INFO:     sys.gpu.0.total_memory       : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory [3]    : (0.0, 8127578112.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/f015737d40bd4879b7bf8f84ec57f187
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/f015737d40bd4879b7bf8f84ec57f187
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (1.0, 1.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/eab46dc8964f493d8cd60a7b0da90cf4
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/eab46dc8964f493d8cd60a7b0da90cf4
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory [3]    : (380174336.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization [3]: (1.0, 66.0)
+COMET INFO:     sys.gpu.0.total_memory       : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory [3]    : (0.0, 8127578112.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/9e3ddd3d0e4d4b6ea2a1f2dcb0c192ad
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/9e3ddd3d0e4d4b6ea2a1f2dcb0c192ad
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (1.0, 1.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/94369112710e4b79be59cbddd2fb0318
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/94369112710e4b79be59cbddd2fb0318
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory [3]    : (380174336.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization [3]: (2.0, 78.0)
+COMET INFO:     sys.gpu.0.total_memory       : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory [3]    : (0.0, 8127578112.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/d1fa7d97fbe348cfa3b0892e170ef85b
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/d1fa7d97fbe348cfa3b0892e170ef85b
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/565ed1d1ba6e407fa4a7aa3378b39720
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/565ed1d1ba6e407fa4a7aa3378b39720
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory [3]    : (380174336.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization [3]: (2.0, 98.0)
+COMET INFO:     sys.gpu.0.total_memory       : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory [3]    : (0.0, 8127578112.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/6699b8a7816f49dbba10621d573618f0
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/6699b8a7816f49dbba10621d573618f0
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (1.0, 1.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/9649d6ca442e4d26a35c138e6e7dbe99
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/9649d6ca442e4d26a35c138e6e7dbe99
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory [3]    : (380174336.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization [3]: (0.0, 76.0)
+COMET INFO:     sys.gpu.0.total_memory       : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory [3]    : (0.0, 8127578112.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/ad284ce4e6234234b82c82194670acbc
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/ad284ce4e6234234b82c82194670acbc
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (0.0, 0.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/f4adc2fdc5ed428086fa7ba8f925c6fd
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/f4adc2fdc5ed428086fa7ba8f925c6fd
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory [3]    : (380174336.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization [3]: (0.0, 82.0)
+COMET INFO:     sys.gpu.0.total_memory       : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory [3]    : (0.0, 8127578112.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/0ba649b45cea42399168a0b3ace64ce9
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/0ba649b45cea42399168a0b3ace64ce9
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/a14df308f0524569bcc0b2cf987a44cb
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/a14df308f0524569bcc0b2cf987a44cb
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (1.0, 1.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/03ad6acce8a2495fb4ec34655fb78187
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/03ad6acce8a2495fb4ec34655fb78187
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (0.0, 0.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/7af6f9bdca9f43c3a3a8f51f8f6e91d2
+
+Traceback (most recent call last):
+  File "code2seq.py", line 73, in <module>
+    model = Model(config)
+  File "/home/lv71161/cspiess/code2seq/model.py", line 52, in __init__
+    self.load_model(sess=None)
+  File "/home/lv71161/cspiess/code2seq/model.py", line 895, in load_model
+    with open(self.config.LOAD_PATH + ".dict", "rb") as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'models/java-small-beam/model_iter13.dict'
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/7af6f9bdca9f43c3a3a8f51f8f6e91d2
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (1.0, 1.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/a76f47760064497e8d09d5800d8bfd71
+
+Traceback (most recent call last):
+  File "code2seq.py", line 73, in <module>
+    model = Model(config)
+  File "/home/lv71161/cspiess/code2seq/model.py", line 52, in __init__
+    self.load_model(sess=None)
+  File "/home/lv71161/cspiess/code2seq/model.py", line 895, in load_model
+    with open(self.config.LOAD_PATH + ".dict", "rb") as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'models/java-small-beam/model_iter13.dict'
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/a76f47760064497e8d09d5800d8bfd71
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (0.0, 0.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/4f97b189c6ab442a9c030aec3237a2b8
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/4f97b189c6ab442a9c030aec3237a2b8
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/37d386f374744f15accb484f1fb276db
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/37d386f374744f15accb484f1fb276db
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/3b25ffbae7184c088c6271ef958afd92
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/3b25ffbae7184c088c6271ef958afd92
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/4177a2dd9027441aab6cfac63aaaa296
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/4177a2dd9027441aab6cfac63aaaa296
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/366d4f192ff34f6d98fbe26311534898
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/366d4f192ff34f6d98fbe26311534898
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/f1eb0ec987ef4cf1902c138ce2e82090
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/f1eb0ec987ef4cf1902c138ce2e82090
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/ec949e00ebfe493982b28bc4ba894266
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/ec949e00ebfe493982b28bc4ba894266
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (1.0, 1.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/772a492108d44bd98b5f555e9a647c54
+
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/772a492108d44bd98b5f555e9a647c54
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     sys.gpu.0.free_memory    : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization: (2.0, 2.0)
+COMET INFO:     sys.gpu.0.total_memory   : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory    : (0.0, 0.0)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)

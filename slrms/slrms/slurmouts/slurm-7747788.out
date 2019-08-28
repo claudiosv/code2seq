@@ -1,0 +1,201 @@
+  Loading cuda/10.0.130 from: /opt/sw/x86_64/glibc-2.17/ivybridge-ep/cuda/10.0.130/
+  Loading gcc/7.3.0 from: /opt/sw/x86_64/glibc-2.17/ivybridge-ep/gcc/7.3.0/
+
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+To initialize your shell, run
+
+    $ conda init <SHELL_NAME>
+
+Currently supported shells are:
+  - bash
+  - fish
+  - tcsh
+  - xonsh
+  - zsh
+  - powershell
+
+See 'conda init --help' for more information and options.
+
+IMPORTANT: You may need to close and restart your shell after running 'conda init'.
+
+
+WARNING: Logging before flag parsing goes to stderr.
+W0812 13:12:52.203047 47995134750336 deprecation_wrapper.py:119] From /home/lv71161/cspiess/code2seq/model.py:22: The name tf.random.set_random_seed is deprecated. Please use tf.compat.v1.random.set_random_seed instead.
+
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/1e72ee9eeda44e60a56e30146120159f
+
+W0812 13:12:55.209928 47995134750336 deprecation_wrapper.py:119] From /home/lv71161/cspiess/code2seq/model.py:31: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+OMP: Info #212: KMP_AFFINITY: decoding x2APIC ids.
+OMP: Info #210: KMP_AFFINITY: Affinity capable, using global cpuid leaf 11 info
+OMP: Info #154: KMP_AFFINITY: Initial OS proc set respected: 0-31
+OMP: Info #156: KMP_AFFINITY: 32 available OS procs
+OMP: Info #157: KMP_AFFINITY: Uniform topology
+OMP: Info #179: KMP_AFFINITY: 2 packages x 8 cores/pkg x 2 threads/core (16 total cores)
+OMP: Info #214: KMP_AFFINITY: OS proc to physical thread map:
+OMP: Info #171: KMP_AFFINITY: OS proc 0 maps to package 0 core 0 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 16 maps to package 0 core 0 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 1 maps to package 0 core 1 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 17 maps to package 0 core 1 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 2 maps to package 0 core 2 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 18 maps to package 0 core 2 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 3 maps to package 0 core 3 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 19 maps to package 0 core 3 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 4 maps to package 0 core 4 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 20 maps to package 0 core 4 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 5 maps to package 0 core 5 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 21 maps to package 0 core 5 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 6 maps to package 0 core 6 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 22 maps to package 0 core 6 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 7 maps to package 0 core 7 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 23 maps to package 0 core 7 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 8 maps to package 1 core 0 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 24 maps to package 1 core 0 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 9 maps to package 1 core 1 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 25 maps to package 1 core 1 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 10 maps to package 1 core 2 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 26 maps to package 1 core 2 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 11 maps to package 1 core 3 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 27 maps to package 1 core 3 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 12 maps to package 1 core 4 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 28 maps to package 1 core 4 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 13 maps to package 1 core 5 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 29 maps to package 1 core 5 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 14 maps to package 1 core 6 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 30 maps to package 1 core 6 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 15 maps to package 1 core 7 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 31 maps to package 1 core 7 thread 1 
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12791 thread 0 bound to OS proc set 0
+W0812 13:12:55.247220 47995134750336 deprecation_wrapper.py:119] From /home/lv71161/cspiess/code2seq/reader.py:35: The name tf.logging.set_verbosity is deprecated. Please use tf.compat.v1.logging.set_verbosity instead.
+
+W0812 13:12:55.248221 47995134750336 deprecation_wrapper.py:119] From /home/lv71161/cspiess/code2seq/reader.py:35: The name tf.logging.ERROR is deprecated. Please use tf.compat.v1.logging.ERROR instead.
+
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12880 thread 1 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12879 thread 2 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12903 thread 3 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12904 thread 4 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12905 thread 5 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12906 thread 6 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12907 thread 7 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12908 thread 8 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12910 thread 10 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12909 thread 9 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12912 thread 12 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12911 thread 11 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12913 thread 13 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12915 thread 15 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12914 thread 14 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12916 thread 16 bound to OS proc set 16
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12917 thread 17 bound to OS proc set 17
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12918 thread 18 bound to OS proc set 18
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12919 thread 19 bound to OS proc set 19
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12920 thread 20 bound to OS proc set 20
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12922 thread 22 bound to OS proc set 22
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12921 thread 21 bound to OS proc set 21
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12923 thread 23 bound to OS proc set 23
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12924 thread 24 bound to OS proc set 24
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12925 thread 25 bound to OS proc set 25
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12926 thread 26 bound to OS proc set 26
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12928 thread 28 bound to OS proc set 28
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12927 thread 27 bound to OS proc set 27
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12929 thread 29 bound to OS proc set 29
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12930 thread 30 bound to OS proc set 30
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12931 thread 31 bound to OS proc set 31
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12932 thread 32 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 12791 tid 12933 thread 33 bound to OS proc set 1
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/1e72ee9eeda44e60a56e30146120159f
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)
+WARNING: Logging before flag parsing goes to stderr.
+W0812 13:32:28.861829 48002634522240 deprecation_wrapper.py:119] From /home/lv71161/cspiess/code2seq/model.py:22: The name tf.random.set_random_seed is deprecated. Please use tf.compat.v1.random.set_random_seed instead.
+
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/d4ba455b7ede4551ba88a9ca8cbff051
+
+W0812 13:32:31.492628 48002634522240 deprecation_wrapper.py:119] From /home/lv71161/cspiess/code2seq/model.py:31: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+OMP: Info #212: KMP_AFFINITY: decoding x2APIC ids.
+OMP: Info #210: KMP_AFFINITY: Affinity capable, using global cpuid leaf 11 info
+OMP: Info #154: KMP_AFFINITY: Initial OS proc set respected: 0-31
+OMP: Info #156: KMP_AFFINITY: 32 available OS procs
+OMP: Info #157: KMP_AFFINITY: Uniform topology
+OMP: Info #179: KMP_AFFINITY: 2 packages x 8 cores/pkg x 2 threads/core (16 total cores)
+OMP: Info #214: KMP_AFFINITY: OS proc to physical thread map:
+OMP: Info #171: KMP_AFFINITY: OS proc 0 maps to package 0 core 0 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 16 maps to package 0 core 0 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 1 maps to package 0 core 1 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 17 maps to package 0 core 1 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 2 maps to package 0 core 2 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 18 maps to package 0 core 2 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 3 maps to package 0 core 3 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 19 maps to package 0 core 3 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 4 maps to package 0 core 4 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 20 maps to package 0 core 4 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 5 maps to package 0 core 5 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 21 maps to package 0 core 5 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 6 maps to package 0 core 6 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 22 maps to package 0 core 6 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 7 maps to package 0 core 7 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 23 maps to package 0 core 7 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 8 maps to package 1 core 0 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 24 maps to package 1 core 0 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 9 maps to package 1 core 1 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 25 maps to package 1 core 1 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 10 maps to package 1 core 2 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 26 maps to package 1 core 2 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 11 maps to package 1 core 3 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 27 maps to package 1 core 3 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 12 maps to package 1 core 4 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 28 maps to package 1 core 4 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 13 maps to package 1 core 5 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 29 maps to package 1 core 5 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 14 maps to package 1 core 6 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 30 maps to package 1 core 6 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 15 maps to package 1 core 7 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 31 maps to package 1 core 7 thread 1 
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13116 thread 0 bound to OS proc set 0
+W0812 13:32:31.523776 48002634522240 deprecation_wrapper.py:119] From /home/lv71161/cspiess/code2seq/reader.py:35: The name tf.logging.set_verbosity is deprecated. Please use tf.compat.v1.logging.set_verbosity instead.
+
+W0812 13:32:31.524332 48002634522240 deprecation_wrapper.py:119] From /home/lv71161/cspiess/code2seq/reader.py:35: The name tf.logging.ERROR is deprecated. Please use tf.compat.v1.logging.ERROR instead.
+
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13198 thread 1 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13197 thread 2 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13222 thread 3 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13224 thread 5 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13223 thread 4 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13225 thread 6 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13228 thread 9 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13227 thread 8 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13226 thread 7 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13229 thread 10 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13230 thread 11 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13231 thread 12 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13232 thread 13 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13233 thread 14 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13234 thread 15 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13235 thread 16 bound to OS proc set 16
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13236 thread 17 bound to OS proc set 17
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13238 thread 19 bound to OS proc set 19
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13237 thread 18 bound to OS proc set 18
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13239 thread 20 bound to OS proc set 20
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13240 thread 21 bound to OS proc set 21
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13241 thread 22 bound to OS proc set 22
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13242 thread 23 bound to OS proc set 23
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13243 thread 24 bound to OS proc set 24
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13244 thread 25 bound to OS proc set 25
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13245 thread 26 bound to OS proc set 26
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13246 thread 27 bound to OS proc set 27
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13247 thread 28 bound to OS proc set 28
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13248 thread 29 bound to OS proc set 29
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13249 thread 30 bound to OS proc set 30
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13250 thread 31 bound to OS proc set 31
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13251 thread 32 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 13116 tid 13252 thread 33 bound to OS proc set 1
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/d4ba455b7ede4551ba88a9ca8cbff051
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)

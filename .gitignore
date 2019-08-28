@@ -17,3 +17,6 @@ tmp/
 java-small.*
 java-pico-bpe.*
 preprocessing/
+java-med-preprocessed.tar.gz
+figures/
+java-med/

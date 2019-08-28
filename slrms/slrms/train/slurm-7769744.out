@@ -1,0 +1,32 @@
+  Loading cuda/9.0.176 from: /opt/sw/x86_64/glibc-2.17/ivybridge-ep/cuda/9.0.176/
+Fri Aug 23 17:46:37 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 387.34                 Driver Version: 387.34                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 1080    Off  | 00000000:02:00.0 Off |                  N/A |
+|  0%   31C    P0    37W / 180W |      0MiB /  8113MiB |      2%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Traceback (most recent call last):
+  File "code2seq.py", line 68, in <module>
+    config = Config.get_config_json(args, f)
+  File "/home/lv71161/cspiess/code2seq/config.py", line 42, in get_config_json
+    otherConfig = json.load(jsonConfig)
+  File "/home/lv71161/cspiess/anaconda3/envs/tf_test_old/lib/python3.6/json/__init__.py", line 299, in load
+    parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/home/lv71161/cspiess/anaconda3/envs/tf_test_old/lib/python3.6/json/__init__.py", line 354, in loads
+    return _default_decoder.decode(s)
+  File "/home/lv71161/cspiess/anaconda3/envs/tf_test_old/lib/python3.6/json/decoder.py", line 339, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/home/lv71161/cspiess/anaconda3/envs/tf_test_old/lib/python3.6/json/decoder.py", line 357, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)

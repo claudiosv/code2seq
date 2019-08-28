@@ -1,0 +1,419 @@
+  Loading cuda/9.0.176 from: /opt/sw/x86_64/glibc-2.17/ivybridge-ep/cuda/9.0.176/
+Sun Aug 18 10:29:02 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 387.34                 Driver Version: 387.34                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 1080    Off  | 00000000:02:00.0 Off |                  N/A |
+|  0%   30C    P0    38W / 180W |      0MiB /  8113MiB |      2%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Successfully loaded config from configs/java-small-high-maxparts.json
+COMET INFO: old comet version (2.0.6) detected. current: 2.0.8 please update your comet lib with command: `pip install --no-cache-dir --upgrade comet_ml`
+COMET INFO: Experiment is live on comet.ml https://www.comet.ml/cspiess/code2seq/a9e9cd20b7d148b3aa7637192ad2050a
+
+Dictionaries loaded.
+Subtoken to count 5829
+target to count 4132
+node to count 321
+Loaded subtoken vocab. size: 5831
+Loaded target word vocab. size: 4135
+Loaded nodes vocab. size: 323
+Created model
+Starting training
+COMET ERROR: Failed to extract parameters from Estimator.init()
+Training batch size:			 256
+Dataset path:				 data/java-small-case-10k/java-small-case-10k
+Training file path:			 data/java-small-case-10k/java-small-case-10k.train.c2s
+Validation path:			 data/java-small-case-10k/java-small-case-10k.val.c2s
+Taking max contexts from each example:	 200
+Random path sampling:			 True
+Embedding size:				 128
+Using BiLSTMs, each of size:		 128
+Using LSTM of size:			 256
+Decoder size:				 320
+Decoder layers:				 1
+Max path lengths:			 9
+Max subtokens in a token:		 20
+Max target length:			 24
+Embeddings dropout keep_prob:		 0.75
+LSTM dropout keep_prob:			 0.5
+============================================
+Initalized variables
+Started reader...
+Starting new epoch 1
+Average loss at batch 100: 0.116216, 	throughput: 277 samples/sec
+Average loss at batch 200: 0.092065, 	throughput: 300 samples/sec
+Average loss at batch 300: 0.087603, 	throughput: 300 samples/sec
+Average loss at batch 400: 0.086513, 	throughput: 301 samples/sec
+Average loss at batch 500: 0.085207, 	throughput: 302 samples/sec
+Average loss at batch 600: 0.084213, 	throughput: 302 samples/sec
+Average loss at batch 700: 0.082483, 	throughput: 301 samples/sec
+Average loss at batch 800: 0.081332, 	throughput: 300 samples/sec
+Average loss at batch 900: 0.080253, 	throughput: 300 samples/sec
+Average loss at batch 1000: 0.080229, 	throughput: 301 samples/sec
+Average loss at batch 1100: 0.078882, 	throughput: 300 samples/sec
+Average loss at batch 1200: 0.077575, 	throughput: 301 samples/sec
+Average loss at batch 1300: 0.076753, 	throughput: 301 samples/sec
+Average loss at batch 1400: 0.075368, 	throughput: 301 samples/sec
+Average loss at batch 1500: 0.074788, 	throughput: 301 samples/sec
+Average loss at batch 1600: 0.073521, 	throughput: 300 samples/sec
+Average loss at batch 1700: 0.072769, 	throughput: 299 samples/sec
+Average loss at batch 1800: 0.070879, 	throughput: 297 samples/sec
+Average loss at batch 1900: 0.069667, 	throughput: 296 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m37s
+Epochs trained: 1.00000
+Accuracy after 1 epochs: 0.04571
+After 1 epochs: Precision: 0.22788, recall: 0.11237, F1: 0.15052
+Saved after 1 epochs in: models/java-small-case-10k/model_iter1
+Starting new epoch 2
+Average loss at batch 2000: 0.068386, 	throughput: 193 samples/sec
+Average loss at batch 2100: 0.067556, 	throughput: 295 samples/sec
+Average loss at batch 2200: 0.066750, 	throughput: 299 samples/sec
+Average loss at batch 2300: 0.066493, 	throughput: 300 samples/sec
+Average loss at batch 2400: 0.065514, 	throughput: 300 samples/sec
+Average loss at batch 2500: 0.064775, 	throughput: 301 samples/sec
+Average loss at batch 2600: 0.063758, 	throughput: 300 samples/sec
+Average loss at batch 2700: 0.062882, 	throughput: 299 samples/sec
+Average loss at batch 2800: 0.062276, 	throughput: 300 samples/sec
+Average loss at batch 2900: 0.062499, 	throughput: 299 samples/sec
+Average loss at batch 3000: 0.061639, 	throughput: 300 samples/sec
+Average loss at batch 3100: 0.061349, 	throughput: 299 samples/sec
+Average loss at batch 3200: 0.060543, 	throughput: 300 samples/sec
+Average loss at batch 3300: 0.059799, 	throughput: 299 samples/sec
+Average loss at batch 3400: 0.059684, 	throughput: 298 samples/sec
+Average loss at batch 3500: 0.059352, 	throughput: 299 samples/sec
+Average loss at batch 3600: 0.058655, 	throughput: 297 samples/sec
+Average loss at batch 3700: 0.058195, 	throughput: 298 samples/sec
+Average loss at batch 3800: 0.057560, 	throughput: 299 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 2.00000
+Accuracy after 2 epochs: 0.05960
+After 2 epochs: Precision: 0.24982, recall: 0.18855, F1: 0.21490
+Saved after 2 epochs in: models/java-small-case-10k/model_iter2
+Starting new epoch 3
+Average loss at batch 3900: 0.056634, 	throughput: 192 samples/sec
+Average loss at batch 4000: 0.056013, 	throughput: 294 samples/sec
+Average loss at batch 4100: 0.055797, 	throughput: 298 samples/sec
+Average loss at batch 4200: 0.055618, 	throughput: 298 samples/sec
+Average loss at batch 4300: 0.055703, 	throughput: 300 samples/sec
+Average loss at batch 4400: 0.055075, 	throughput: 298 samples/sec
+Average loss at batch 4500: 0.054274, 	throughput: 299 samples/sec
+Average loss at batch 4600: 0.054182, 	throughput: 300 samples/sec
+Average loss at batch 4700: 0.053366, 	throughput: 300 samples/sec
+Average loss at batch 4800: 0.053818, 	throughput: 300 samples/sec
+Average loss at batch 4900: 0.053529, 	throughput: 300 samples/sec
+Average loss at batch 5000: 0.053530, 	throughput: 299 samples/sec
+Average loss at batch 5100: 0.052706, 	throughput: 299 samples/sec
+Average loss at batch 5200: 0.052657, 	throughput: 300 samples/sec
+Average loss at batch 5300: 0.052283, 	throughput: 299 samples/sec
+Average loss at batch 5400: 0.052598, 	throughput: 300 samples/sec
+Average loss at batch 5500: 0.052119, 	throughput: 299 samples/sec
+Average loss at batch 5600: 0.051895, 	throughput: 299 samples/sec
+Average loss at batch 5700: 0.051377, 	throughput: 298 samples/sec
+Average loss at batch 5800: 0.051022, 	throughput: 282 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 3.00000
+Accuracy after 3 epochs: 0.09516
+After 3 epochs: Precision: 0.29428, recall: 0.25938, F1: 0.27573
+Saved after 3 epochs in: models/java-small-case-10k/model_iter3
+Starting new epoch 4
+Average loss at batch 5900: 0.050410, 	throughput: 190 samples/sec
+Average loss at batch 6000: 0.050268, 	throughput: 293 samples/sec
+Average loss at batch 6100: 0.050026, 	throughput: 297 samples/sec
+Average loss at batch 6200: 0.050077, 	throughput: 296 samples/sec
+Average loss at batch 6300: 0.050298, 	throughput: 296 samples/sec
+Average loss at batch 6400: 0.049294, 	throughput: 295 samples/sec
+Average loss at batch 6500: 0.049205, 	throughput: 296 samples/sec
+Average loss at batch 6600: 0.048766, 	throughput: 296 samples/sec
+Average loss at batch 6700: 0.048968, 	throughput: 295 samples/sec
+Average loss at batch 6800: 0.049051, 	throughput: 295 samples/sec
+Average loss at batch 6900: 0.048960, 	throughput: 295 samples/sec
+Average loss at batch 7000: 0.048576, 	throughput: 294 samples/sec
+Average loss at batch 7100: 0.048196, 	throughput: 297 samples/sec
+Average loss at batch 7200: 0.048405, 	throughput: 294 samples/sec
+Average loss at batch 7300: 0.048220, 	throughput: 295 samples/sec
+Average loss at batch 7400: 0.048554, 	throughput: 295 samples/sec
+Average loss at batch 7500: 0.048351, 	throughput: 293 samples/sec
+Average loss at batch 7600: 0.047520, 	throughput: 296 samples/sec
+Average loss at batch 7700: 0.047365, 	throughput: 296 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m39s
+Epochs trained: 4.00000
+Accuracy after 4 epochs: 0.12284
+After 4 epochs: Precision: 0.32939, recall: 0.28289, F1: 0.30437
+Saved after 4 epochs in: models/java-small-case-10k/model_iter4
+Starting new epoch 5
+Average loss at batch 7800: 0.046686, 	throughput: 190 samples/sec
+Average loss at batch 7900: 0.046864, 	throughput: 294 samples/sec
+Average loss at batch 8000: 0.046440, 	throughput: 297 samples/sec
+Average loss at batch 8100: 0.046902, 	throughput: 298 samples/sec
+Average loss at batch 8200: 0.046610, 	throughput: 298 samples/sec
+Average loss at batch 8300: 0.046139, 	throughput: 299 samples/sec
+Average loss at batch 8400: 0.046033, 	throughput: 298 samples/sec
+Average loss at batch 8500: 0.045819, 	throughput: 297 samples/sec
+Average loss at batch 8600: 0.045560, 	throughput: 299 samples/sec
+Average loss at batch 8700: 0.046100, 	throughput: 298 samples/sec
+Average loss at batch 8800: 0.045859, 	throughput: 299 samples/sec
+Average loss at batch 8900: 0.045929, 	throughput: 297 samples/sec
+Average loss at batch 9000: 0.045360, 	throughput: 298 samples/sec
+Average loss at batch 9100: 0.045268, 	throughput: 299 samples/sec
+Average loss at batch 9200: 0.045288, 	throughput: 298 samples/sec
+Average loss at batch 9300: 0.045814, 	throughput: 298 samples/sec
+Average loss at batch 9400: 0.045178, 	throughput: 298 samples/sec
+Average loss at batch 9500: 0.045350, 	throughput: 298 samples/sec
+Average loss at batch 9600: 0.044732, 	throughput: 300 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 5.00000
+Accuracy after 5 epochs: 0.12846
+After 5 epochs: Precision: 0.33138, recall: 0.28323, F1: 0.30542
+Saved after 5 epochs in: models/java-small-case-10k/model_iter5
+Starting new epoch 6
+Average loss at batch 9800: 0.088742, 	throughput: 113 samples/sec
+Average loss at batch 9900: 0.043983, 	throughput: 296 samples/sec
+Average loss at batch 10000: 0.044104, 	throughput: 297 samples/sec
+Average loss at batch 10100: 0.044083, 	throughput: 297 samples/sec
+Average loss at batch 10200: 0.044301, 	throughput: 297 samples/sec
+Average loss at batch 10300: 0.043711, 	throughput: 297 samples/sec
+Average loss at batch 10400: 0.043424, 	throughput: 298 samples/sec
+Average loss at batch 10500: 0.043233, 	throughput: 297 samples/sec
+Average loss at batch 10600: 0.043449, 	throughput: 297 samples/sec
+Average loss at batch 10700: 0.044014, 	throughput: 298 samples/sec
+Average loss at batch 10800: 0.043548, 	throughput: 298 samples/sec
+Average loss at batch 10900: 0.043147, 	throughput: 295 samples/sec
+Average loss at batch 11000: 0.043355, 	throughput: 297 samples/sec
+Average loss at batch 11100: 0.043079, 	throughput: 296 samples/sec
+Average loss at batch 11200: 0.043477, 	throughput: 296 samples/sec
+Average loss at batch 11300: 0.043413, 	throughput: 296 samples/sec
+Average loss at batch 11400: 0.043322, 	throughput: 296 samples/sec
+Average loss at batch 11500: 0.042939, 	throughput: 295 samples/sec
+Average loss at batch 11600: 0.042378, 	throughput: 295 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 6.00000
+Accuracy after 6 epochs: 0.13882
+After 6 epochs: Precision: 0.34172, recall: 0.27404, F1: 0.30416
+Starting new epoch 7
+Average loss at batch 11700: 0.042256, 	throughput: 192 samples/sec
+Average loss at batch 11800: 0.042164, 	throughput: 294 samples/sec
+Average loss at batch 11900: 0.042100, 	throughput: 295 samples/sec
+Average loss at batch 12000: 0.042399, 	throughput: 297 samples/sec
+Average loss at batch 12100: 0.042194, 	throughput: 296 samples/sec
+Average loss at batch 12200: 0.041953, 	throughput: 297 samples/sec
+Average loss at batch 12300: 0.041676, 	throughput: 298 samples/sec
+Average loss at batch 12400: 0.041405, 	throughput: 296 samples/sec
+Average loss at batch 12500: 0.041638, 	throughput: 296 samples/sec
+Average loss at batch 12600: 0.042141, 	throughput: 297 samples/sec
+Average loss at batch 12700: 0.041511, 	throughput: 296 samples/sec
+Average loss at batch 12800: 0.041754, 	throughput: 297 samples/sec
+Average loss at batch 12900: 0.041593, 	throughput: 298 samples/sec
+Average loss at batch 13000: 0.041405, 	throughput: 297 samples/sec
+Average loss at batch 13100: 0.041682, 	throughput: 297 samples/sec
+Average loss at batch 13200: 0.041886, 	throughput: 296 samples/sec
+Average loss at batch 13300: 0.041500, 	throughput: 295 samples/sec
+Average loss at batch 13400: 0.041476, 	throughput: 297 samples/sec
+Average loss at batch 13500: 0.041041, 	throughput: 297 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 7.00000
+Accuracy after 7 epochs: 0.14566
+After 7 epochs: Precision: 0.34636, recall: 0.28819, F1: 0.31461
+Saved after 7 epochs in: models/java-small-case-10k/model_iter7
+Starting new epoch 8
+Average loss at batch 13600: 0.040664, 	throughput: 189 samples/sec
+Average loss at batch 13700: 0.040462, 	throughput: 293 samples/sec
+Average loss at batch 13800: 0.040655, 	throughput: 295 samples/sec
+Average loss at batch 13900: 0.040567, 	throughput: 297 samples/sec
+Average loss at batch 14000: 0.040838, 	throughput: 298 samples/sec
+Average loss at batch 14100: 0.040758, 	throughput: 298 samples/sec
+Average loss at batch 14200: 0.039987, 	throughput: 298 samples/sec
+Average loss at batch 14300: 0.040265, 	throughput: 299 samples/sec
+Average loss at batch 14400: 0.039849, 	throughput: 298 samples/sec
+Average loss at batch 14500: 0.040473, 	throughput: 298 samples/sec
+Average loss at batch 14600: 0.040350, 	throughput: 297 samples/sec
+Average loss at batch 14700: 0.040406, 	throughput: 298 samples/sec
+Average loss at batch 14800: 0.040022, 	throughput: 297 samples/sec
+Average loss at batch 14900: 0.040265, 	throughput: 297 samples/sec
+Average loss at batch 15000: 0.039890, 	throughput: 296 samples/sec
+Average loss at batch 15100: 0.040575, 	throughput: 296 samples/sec
+Average loss at batch 15200: 0.040281, 	throughput: 297 samples/sec
+Average loss at batch 15300: 0.040051, 	throughput: 295 samples/sec
+Average loss at batch 15400: 0.039779, 	throughput: 295 samples/sec
+Average loss at batch 15500: 0.039578, 	throughput: 286 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 8.00000
+Accuracy after 8 epochs: 0.14750
+After 8 epochs: Precision: 0.34036, recall: 0.29845, F1: 0.31803
+Saved after 8 epochs in: models/java-small-case-10k/model_iter8
+Starting new epoch 9
+Average loss at batch 15600: 0.039347, 	throughput: 194 samples/sec
+Average loss at batch 15700: 0.039334, 	throughput: 295 samples/sec
+Average loss at batch 15800: 0.039161, 	throughput: 297 samples/sec
+Average loss at batch 15900: 0.039332, 	throughput: 297 samples/sec
+Average loss at batch 16000: 0.039763, 	throughput: 299 samples/sec
+Average loss at batch 16100: 0.038908, 	throughput: 298 samples/sec
+Average loss at batch 16200: 0.038913, 	throughput: 298 samples/sec
+Average loss at batch 16300: 0.038658, 	throughput: 299 samples/sec
+Average loss at batch 16400: 0.039191, 	throughput: 299 samples/sec
+Average loss at batch 16500: 0.039174, 	throughput: 298 samples/sec
+Average loss at batch 16600: 0.039236, 	throughput: 299 samples/sec
+Average loss at batch 16700: 0.039002, 	throughput: 299 samples/sec
+Average loss at batch 16800: 0.038759, 	throughput: 299 samples/sec
+Average loss at batch 16900: 0.039083, 	throughput: 299 samples/sec
+Average loss at batch 17000: 0.039104, 	throughput: 298 samples/sec
+Average loss at batch 17100: 0.039182, 	throughput: 298 samples/sec
+Average loss at batch 17200: 0.039308, 	throughput: 298 samples/sec
+Average loss at batch 17300: 0.038590, 	throughput: 298 samples/sec
+Average loss at batch 17400: 0.038491, 	throughput: 299 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 9.00000
+Accuracy after 9 epochs: 0.14440
+After 9 epochs: Precision: 0.33139, recall: 0.28603, F1: 0.30704
+Starting new epoch 10
+Average loss at batch 17500: 0.038077, 	throughput: 184 samples/sec
+Average loss at batch 17600: 0.038358, 	throughput: 291 samples/sec
+Average loss at batch 17700: 0.038149, 	throughput: 293 samples/sec
+Average loss at batch 17800: 0.038306, 	throughput: 294 samples/sec
+Average loss at batch 17900: 0.038363, 	throughput: 294 samples/sec
+Average loss at batch 18000: 0.037992, 	throughput: 296 samples/sec
+Average loss at batch 18100: 0.037859, 	throughput: 297 samples/sec
+Average loss at batch 18200: 0.037775, 	throughput: 295 samples/sec
+Average loss at batch 18300: 0.037830, 	throughput: 295 samples/sec
+Average loss at batch 18400: 0.038376, 	throughput: 294 samples/sec
+Average loss at batch 18500: 0.038025, 	throughput: 293 samples/sec
+Average loss at batch 18600: 0.038147, 	throughput: 295 samples/sec
+Average loss at batch 18700: 0.037822, 	throughput: 294 samples/sec
+Average loss at batch 18800: 0.037894, 	throughput: 294 samples/sec
+Average loss at batch 18900: 0.037967, 	throughput: 294 samples/sec
+Average loss at batch 19000: 0.038409, 	throughput: 293 samples/sec
+Average loss at batch 19100: 0.037955, 	throughput: 296 samples/sec
+Average loss at batch 19200: 0.038076, 	throughput: 295 samples/sec
+Average loss at batch 19300: 0.037588, 	throughput: 293 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m37s
+Epochs trained: 10.00000
+Accuracy after 10 epochs: 0.15337
+After 10 epochs: Precision: 0.33385, recall: 0.29007, F1: 0.31042
+Starting new epoch 11
+Average loss at batch 19500: 0.074563, 	throughput: 116 samples/sec
+Average loss at batch 19600: 0.037162, 	throughput: 295 samples/sec
+Average loss at batch 19700: 0.037306, 	throughput: 297 samples/sec
+Average loss at batch 19800: 0.037337, 	throughput: 297 samples/sec
+Average loss at batch 19900: 0.037626, 	throughput: 296 samples/sec
+Average loss at batch 20000: 0.037035, 	throughput: 298 samples/sec
+Average loss at batch 20100: 0.036942, 	throughput: 298 samples/sec
+Average loss at batch 20200: 0.036826, 	throughput: 298 samples/sec
+Average loss at batch 20300: 0.036963, 	throughput: 297 samples/sec
+Average loss at batch 20400: 0.037525, 	throughput: 298 samples/sec
+Average loss at batch 20500: 0.037152, 	throughput: 299 samples/sec
+Average loss at batch 20600: 0.036881, 	throughput: 298 samples/sec
+Average loss at batch 20700: 0.037242, 	throughput: 299 samples/sec
+Average loss at batch 20800: 0.036978, 	throughput: 297 samples/sec
+Average loss at batch 20900: 0.037405, 	throughput: 299 samples/sec
+Average loss at batch 21000: 0.037388, 	throughput: 296 samples/sec
+Average loss at batch 21100: 0.037253, 	throughput: 298 samples/sec
+Average loss at batch 21200: 0.036903, 	throughput: 299 samples/sec
+Average loss at batch 21300: 0.036421, 	throughput: 297 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 11.00000
+Accuracy after 11 epochs: 0.15505
+After 11 epochs: Precision: 0.32834, recall: 0.28488, F1: 0.30507
+Starting new epoch 12
+Average loss at batch 21400: 0.036510, 	throughput: 185 samples/sec
+Average loss at batch 21500: 0.036481, 	throughput: 293 samples/sec
+Average loss at batch 21600: 0.036400, 	throughput: 296 samples/sec
+Average loss at batch 21700: 0.036662, 	throughput: 297 samples/sec
+Average loss at batch 21800: 0.036696, 	throughput: 297 samples/sec
+Average loss at batch 21900: 0.036315, 	throughput: 298 samples/sec
+Average loss at batch 22000: 0.036180, 	throughput: 297 samples/sec
+Average loss at batch 22100: 0.035938, 	throughput: 297 samples/sec
+Average loss at batch 22200: 0.036190, 	throughput: 296 samples/sec
+Average loss at batch 22300: 0.036698, 	throughput: 297 samples/sec
+Average loss at batch 22400: 0.036209, 	throughput: 296 samples/sec
+Average loss at batch 22500: 0.036308, 	throughput: 296 samples/sec
+Average loss at batch 22600: 0.036258, 	throughput: 296 samples/sec
+Average loss at batch 22700: 0.036202, 	throughput: 296 samples/sec
+Average loss at batch 22800: 0.036582, 	throughput: 296 samples/sec
+Average loss at batch 22900: 0.036738, 	throughput: 297 samples/sec
+Average loss at batch 23000: 0.036277, 	throughput: 296 samples/sec
+Average loss at batch 23100: 0.036341, 	throughput: 296 samples/sec
+Average loss at batch 23200: 0.036075, 	throughput: 295 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m37s
+Epochs trained: 12.00000
+Accuracy after 12 epochs: 0.15400
+After 12 epochs: Precision: 0.32342, recall: 0.27427, F1: 0.29683
+Starting new epoch 13
+Average loss at batch 23300: 0.035738, 	throughput: 192 samples/sec
+Average loss at batch 23400: 0.035629, 	throughput: 291 samples/sec
+Average loss at batch 23500: 0.035799, 	throughput: 296 samples/sec
+Average loss at batch 23600: 0.035692, 	throughput: 295 samples/sec
+Average loss at batch 23700: 0.035936, 	throughput: 294 samples/sec
+Average loss at batch 23800: 0.035960, 	throughput: 296 samples/sec
+Average loss at batch 23900: 0.035299, 	throughput: 294 samples/sec
+Average loss at batch 24000: 0.035653, 	throughput: 297 samples/sec
+Average loss at batch 24100: 0.035243, 	throughput: 296 samples/sec
+Average loss at batch 24200: 0.035878, 	throughput: 296 samples/sec
+Average loss at batch 24300: 0.035654, 	throughput: 296 samples/sec
+Average loss at batch 24400: 0.035822, 	throughput: 297 samples/sec
+Average loss at batch 24500: 0.035390, 	throughput: 294 samples/sec
+Average loss at batch 24600: 0.035765, 	throughput: 296 samples/sec
+Average loss at batch 24700: 0.035468, 	throughput: 296 samples/sec
+Average loss at batch 24800: 0.036097, 	throughput: 296 samples/sec
+Average loss at batch 24900: 0.035746, 	throughput: 296 samples/sec
+Average loss at batch 25000: 0.035661, 	throughput: 296 samples/sec
+Average loss at batch 25100: 0.035440, 	throughput: 295 samples/sec
+Average loss at batch 25200: 0.035289, 	throughput: 284 samples/sec
+Finished 1 epochs
+Done testing, epoch reached
+Evaluation time: 0h0m38s
+Epochs trained: 13.00000
+Accuracy after 13 epochs: 0.15534
+After 13 epochs: Precision: 0.33831, recall: 0.29907, F1: 0.31748
+Not improved for 5 epochs, stopping training
+Best scores - epoch 8: 
+Precision: 0.34036, recall: 0.29845, F1: 0.31803
+COMET INFO: ----------------------------
+COMET INFO: Comet.ml Experiment Summary:
+COMET INFO:   Data:
+COMET INFO:     url: https://www.comet.ml/cspiess/code2seq/a9e9cd20b7d148b3aa7637192ad2050a
+COMET INFO:   Metrics [count] (min, max):
+COMET INFO:     epochs_trained [25]            : (1.0, 13.0)
+COMET INFO:     f1 [25]                        : (0.15051999783709738, 0.3180322052939669)
+COMET INFO:     loss [50413]                   : (6.567520618438721, 38.317108154296875)
+COMET INFO:     precision [25]                 : (0.22787677026768904, 0.34635585185631085)
+COMET INFO:     recall [25]                    : (0.11237300679539797, 0.29906612631207996)
+COMET INFO:     sys.gpu.0.free_memory [745]    : (371785728.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.gpu_utilization [745]: (0.0, 100.0)
+COMET INFO:     sys.gpu.0.total_memory         : (8507752448.0, 8507752448.0)
+COMET INFO:     sys.gpu.0.used_memory [745]    : (0.0, 8135966720.0)
+COMET INFO:     throughput [499]               : (113.14747613551923, 302.28875049644006)
+COMET INFO: ----------------------------
+COMET INFO: Uploading stats to Comet before program termination (may take several seconds)

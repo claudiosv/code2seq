@@ -1,0 +1,26 @@
+#!/bin/bash
+#  usage: sbatch ./gpu_test.scrpt          
+#
+#SBATCH -J train-java-small-case-5k     
+#SBATCH -N 1
+#SBATCH --partition gpu_gtx1080single
+#SBATCH --qos gpu_gtx1080single
+#SBATCH --gres gpu:1
+
+module purge
+module load cuda/9.0.176
+nvidia-smi
+cd ~/code2seq/
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate tf_test_old
+type=java-small-case-5k
+dataset_name=java-small-case-5k
+data_dir=data/java-small-case-5k
+data=${data_dir}/${dataset_name}
+test_data=${data_dir}/${dataset_name}.val.c2s
+model_dir=models/${type}
+config=configs/java-small-high-maxparts.json
+
+mkdir -p ${model_dir}
+set -e
+python3 -u code2seq.py --data ${data} --test ${test_data} --save_prefix ${model_dir}/model --config ${config}

@@ -1,0 +1,29 @@
+Preprocessing training dataset with BPE...
+Num of lines 496351
+Finished encoding training dataset...
+Preprocessing validation dataset with BPE...
+Num of lines 23844
+Finished encoding validation dataset...
+Preprocessing test dataset with BPE...
+Num of lines 57088
+Finished encoding test dataset...
+Creating histograms from the training data
+subtoken vocab size:  2297
+node vocab size:  321
+target vocab size:  997
+File: preprocessing/java-small-nocase-1k/java-small-nocase-1k.test.raw.txt
+Average total contexts: 220.74497267376682
+Average final (after sampling) contexts: 89.03065442825113
+Total examples: 57088
+Max number of contexts per word: 13272
+File: preprocessing/java-small-nocase-1k/java-small-nocase-1k.val.raw.txt
+Average total contexts: 164.20042778057373
+Average final (after sampling) contexts: 70.02675725549405
+Total examples: 23844
+Max number of contexts per word: 47830
+File: preprocessing/java-small-nocase-1k/java-small-nocase-1k.train.raw.txt
+Average total contexts: 163.59083994995478
+Average final (after sampling) contexts: 140.11417525098167
+Total examples: 496351
+Max number of contexts per word: 59724
+Dictionaries saved to: data/java-small-nocase-1k/java-small-nocase-1k.dict.c2s

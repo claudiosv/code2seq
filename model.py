@@ -26,7 +26,7 @@ class Model:
             workspace="cspiess",
             disabled=True
         )
-        
+        self.evaluation_counter = 0
         self.config = config
         self.sess = tf.Session()  # TensorFlow
 
@@ -1097,20 +1097,42 @@ class Model:
                     original_name.split(Common.internal_delimiter)
                 )
 
+            print("Original name: ", original_name)
+            print("Predicted: ", predicted)
+            print("Filtered original: ", filtered_original_subtokens)
+            print("Filtered predicted name: ", filtered_predicted_names)
+            self.evaluation_counter += 1
+            
+            pred_true_pos = 0
+            pred_false_pos = 0
+            pred_false_neg = 0
             if "".join(filtered_original_subtokens) == "".join(
                 filtered_predicted_names
             ):
                 true_positive += len(filtered_original_subtokens)
+                pred_true_pos += len(filtered_original_subtokens)
+                print("Perfect! True positive: ", len(filtered_original_subtokens))
                 continue
 
             for subtok in filtered_predicted_names:
                 if subtok in filtered_original_subtokens:
                     true_positive += 1
+                    pred_true_pos += 1
                 else:
                     false_positive += 1
+                    pred_false_pos += 1
             for subtok in filtered_original_subtokens:
                 if not subtok in filtered_predicted_names:
                     false_negative += 1
+                    pred_false_neg += 1
+            # precision, recall, f1 = self.calculate_results(
+            # true_positive, false_positive, false_negative
+            # )   
+            print("Per pred: True pos: {}, False pos: {}, False neg: {}".format(pred_true_pos,pred_false_pos,pred_false_neg))
+            # print("Precision: {}, Recall: {}, F1: {}".format(precision,recall,f1))
+            if(self.evaluation_counter > 100):
+                exit(1)
+            print("------------------------------\n")
         return true_positive, false_positive, false_negative
 
     def print_hyperparams(self):

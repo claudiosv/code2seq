@@ -1,0 +1,56 @@
+Preprocessing training dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 74, in main
+    writer.write(split_line[0] + " " + " ".join(contexts) + "\n")
+OSError: [Errno 28] No space left on device
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "bpe.py", line 82, in <module>
+    main()
+  File "bpe.py", line 77, in main
+    cnt += 1
+OSError: [Errno 28] No space left on device
+Finished encoding training dataset...
+Preprocessing validation dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 74, in main
+    writer.write(split_line[0] + " " + " ".join(contexts) + "\n")
+OSError: [Errno 28] No space left on device
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "bpe.py", line 82, in <module>
+    main()
+  File "bpe.py", line 77, in main
+    cnt += 1
+OSError: [Errno 28] No space left on device
+Finished encoding validation dataset...
+Preprocessing test dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 74, in main
+    writer.write(split_line[0] + " " + " ".join(contexts) + "\n")
+OSError: [Errno 28] No space left on device
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "bpe.py", line 82, in <module>
+    main()
+  File "bpe.py", line 77, in main
+    cnt += 1
+OSError: [Errno 28] No space left on device
+Finished encoding test dataset...
+Creating histograms from the training data
+subtoken vocab size:  0
+node vocab size:  0
+target vocab size:  0
+File: preprocessing/java-small-case-5k/java-small-case-5k.test.raw.txt
+Traceback (most recent call last):
+  File "preprocess.py", line 204, in <module>
+    max_data_contexts=int(args.max_data_contexts),
+  File "preprocess.py", line 66, in process_file
+    print("Average total contexts: " + str(float(sum_total) / total))
+ZeroDivisionError: float division by zero

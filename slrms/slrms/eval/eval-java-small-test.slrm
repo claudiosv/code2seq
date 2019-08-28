@@ -1,0 +1,20 @@
+#!/bin/bash
+#  usage: sbatch ./gpu_test.scrpt          
+#
+#SBATCH -J eval-java-small-test     
+#SBATCH -N 1
+#SBATCH --partition mem_0128         
+#SBATCH --qos normal_0128
+
+module purge
+module load cuda/10.0.130
+module load gcc/7.3.0
+conda init bash
+conda activate tf_test
+
+cd ~/code2seq/
+dataset=java-small-model-baseline
+dataset_test=java-small
+model_iter=20
+python3 code2seq.py --load models/${dataset}/model_iter${model_iter} --test data/${dataset_test}/${dataset_test}.test.c2s > ${dataset}_test_log.txt
+python3 code2seq.py --load models/${dataset}/model_iter${model_iter} --test data/${dataset_test}/${dataset_test}.val.c2s > ${dataset}_val_log.txt

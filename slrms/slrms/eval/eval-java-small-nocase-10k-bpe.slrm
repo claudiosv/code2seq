@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+#SBATCH -J eval_all
+#SBATCH -N 1
+#SBATCH --partition gpu_gtx1080single
+#SBATCH --qos gpu_gtx1080single
+#SBATCH --gres gpu:1
+
+module purge
+module load cuda/9.0.176
+nvidia-smi
+cd ~/code2seq/
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate tf_test_old
+
+config=configs/java-small-high-maxparts.json
+model=java-small-nocase-10k
+model_iter=10 # TODO
+dataset=java-small-nocase-10k
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
+
+model=java-small-case-1k #1k case
+model_iter=11 #TODO
+dataset=java-small-case-1k
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
+

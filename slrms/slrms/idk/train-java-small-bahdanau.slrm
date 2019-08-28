@@ -1,0 +1,23 @@
+#!/bin/bash
+#  usage: sbatch ./gpu_test.scrpt          
+#
+#SBATCH -J train-java-small-bahdanau     
+#SBATCH -N 1
+#SBATCH --partition gpu_v100         
+#SBATCH --qos gpu_v100
+#SBATCH --gres gpu:1
+
+module purge
+module load cuda/10.0.130
+nvidia-smi
+cd ~/code2seq/
+type=java-small-bahdanau
+dataset_name=java-small
+data_dir=data/java-small
+data=${data_dir}/${dataset_name}
+test_data=${data_dir}/${dataset_name}.val.c2s
+model_dir=models/${type}
+
+mkdir -p ${model_dir}
+set -e
+python3 -u code2seq.py --data ${data} --test ${test_data} --save_prefix ${model_dir}/model

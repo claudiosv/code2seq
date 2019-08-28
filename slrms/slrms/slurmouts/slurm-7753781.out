@@ -1,0 +1,41 @@
+Preprocessing training dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 74, in main
+    writer.write(split_line[0] + " " + " ".join(contexts) + "\n")
+OSError: [Errno 28] No space left on device
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "bpe.py", line 82, in <module>
+    main()
+  File "bpe.py", line 77, in main
+    cnt += 1
+OSError: [Errno 28] No space left on device
+Finished encoding training dataset...
+Preprocessing validation dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 82, in <module>
+    main()
+  File "bpe.py", line 49, in main
+    with open(input_filename) as fp, open(output_filename, "w") as writer:
+OSError: [Errno 28] No space left on device: 'preprocessing/java-small-case-10k/java-small-case-10k.val.raw.txt'
+Finished encoding validation dataset...
+Preprocessing test dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 82, in <module>
+    main()
+  File "bpe.py", line 49, in main
+    with open(input_filename) as fp, open(output_filename, "w") as writer:
+OSError: [Errno 28] No space left on device: 'preprocessing/java-small-case-10k/java-small-case-10k.test.raw.txt'
+Finished encoding test dataset...
+Creating histograms from the training data
+/cm/local/apps/slurm/var/spool/job7753781/slurm_script: line 63: data/java-small-case-10k/java-small-case-10k.histo.tgt.c2s: No space left on device
+/cm/local/apps/slurm/var/spool/job7753781/slurm_script: line 64: data/java-small-case-10k/java-small-case-10k.histo.ori.c2s: No space left on device
+/cm/local/apps/slurm/var/spool/job7753781/slurm_script: line 65: data/java-small-case-10k/java-small-case-10k.histo.node.c2s: No space left on device
+Traceback (most recent call last):
+  File "preprocess.py", line 185, in <module>
+    subtoken_histogram_path, max_size=int(args.subtoken_vocab_size)
+  File "/home/lv71161/cspiess/code2seq/common.py", line 23, in load_histogram
+    with open(path, "r") as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/java-small-case-10k/java-small-case-10k.histo.ori.c2s'

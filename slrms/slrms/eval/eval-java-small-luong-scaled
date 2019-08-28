@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+#SBATCH -J eval-java-scaled-luong 
+#SBATCH -N 1
+#SBATCH --partition gpu_gtx1080single
+#SBATCH --qos gpu_gtx1080single
+#SBATCH --gres gpu:1
+
+module purge
+module load cuda/9.0.176
+nvidia-smi
+cd ~/code2seq/
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate tf_test_old
+
+
+model=java-small-scaled-luong
+model_iter=9
+dataset=java-small
+config=configs/java-small-scaled-luong.json
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt

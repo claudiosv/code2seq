@@ -1,0 +1,10 @@
+Successfully loaded config from configs/java-small-scaled-luong.json
+Loading dictionaries from: models/java-small-scaled-luong/model_iter17
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Done testing, epoch reached
+Evaluation time: 0h0m22s
+Accuracy: 0.20395067941620534
+Precision: 0.4968935710426796, recall: 0.39618069888902846, F1: 0.4408583896705645

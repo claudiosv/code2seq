@@ -1,0 +1,31 @@
+Preprocessing training dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 3, in <module>
+    import dataprep.bpepkg.bpe_encode as bpe_encode
+ModuleNotFoundError: No module named 'dataprep'
+Finished encoding training dataset...
+Preprocessing validation dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 3, in <module>
+    import dataprep.bpepkg.bpe_encode as bpe_encode
+ModuleNotFoundError: No module named 'dataprep'
+Finished encoding validation dataset...
+Preprocessing test dataset with BPE...
+Traceback (most recent call last):
+  File "bpe.py", line 3, in <module>
+    import dataprep.bpepkg.bpe_encode as bpe_encode
+ModuleNotFoundError: No module named 'dataprep'
+Finished encoding test dataset...
+Creating histograms from the training data
+cat: preprocessing/java-small-case-1k/java-small-case-1k.train.raw.txt: No such file or directory
+cat: preprocessing/java-small-case-1k/java-small-case-1k.train.raw.txt: No such file or directory
+cat: preprocessing/java-small-case-1k/java-small-case-1k.train.raw.txt: No such file or directory
+subtoken vocab size:  0
+node vocab size:  0
+target vocab size:  0
+Traceback (most recent call last):
+  File "preprocess.py", line 204, in <module>
+    max_data_contexts=int(args.max_data_contexts),
+  File "preprocess.py", line 42, in process_file
+    with open(file_path, "r") as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'preprocessing/java-small-case-1k/java-small-case-1k.test.raw.txt'

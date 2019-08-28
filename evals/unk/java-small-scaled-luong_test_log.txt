@@ -1,0 +1,12 @@
+Successfully loaded config from configs/java-small-scaled-luong.json
+Loading dictionaries from: models/java-small-scaled-luong/model_iter17
+Done loading dictionaries
+No loading
+Created model
+Done loading model
+Prediction throughput: 1032
+Prediction throughput: 1124
+Done testing, epoch reached
+Evaluation time: 0h0m53s
+Accuracy: 0.1632392096412556
+Precision: 0.4999424673296622, recall: 0.38865248226950355, F1: 0.4373283485512977
