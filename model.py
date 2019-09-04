@@ -24,7 +24,7 @@ class Model:
             api_key="wRZBv07osQnjYfhIUGphpKpxH",
             project_name="code2seq",
             workspace="cspiess",
-            disabled=True
+            disabled=False
         )
         self.evaluation_counter = 0
         self.config = config
@@ -1096,12 +1096,12 @@ class Model:
                 filtered_original_subtokens = Common.filter_impossible_names(
                     original_name.split(Common.internal_delimiter)
                 )
-
-            # print("Original name: ", original_name)
-            # print("Predicted: ", predicted)
-            # print("Filtered original: ", filtered_original_subtokens)
-            # print("Filtered predicted name: ", filtered_predicted_names)
-            self.evaluation_counter += 1
+            if Common.UNK in original_name or Common.UNK in predicted:   
+                print("Original name: ", original_name)
+                print("Predicted: ", predicted)
+                print("Filtered original: ", filtered_original_subtokens)
+                print("Filtered predicted name: ", filtered_predicted_names)
+                self.evaluation_counter += 1
             
             pred_true_pos = 0
             pred_false_pos = 0
@@ -1111,7 +1111,8 @@ class Model:
             ):
                 true_positive += len(filtered_original_subtokens)
                 pred_true_pos += len(filtered_original_subtokens)
-                # print("Perfect! True positive: ", len(filtered_original_subtokens))
+                if Common.UNK in original_name or Common.UNK in predicted:
+                    print("Perfect! True positive: ", len(filtered_original_subtokens))
                 continue
 
             for subtok in filtered_predicted_names:
@@ -1128,11 +1129,13 @@ class Model:
             # precision, recall, f1 = self.calculate_results(
             # true_positive, false_positive, false_negative
             # )   
-            # print("Per pred: True pos: {}, False pos: {}, False neg: {}".format(pred_true_pos,pred_false_pos,pred_false_neg))
+            if Common.UNK in original_name or Common.UNK in predicted:
+                print("Per pred: True pos: {}, False pos: {}, False neg: {}".format(pred_true_pos,pred_false_pos,pred_false_neg))
             # print("Precision: {}, Recall: {}, F1: {}".format(precision,recall,f1))
-            # if(self.evaluation_counter > 100):
-            #     exit(1)
-            print("------------------------------\n")
+            if(self.evaluation_counter > 100):
+                exit(1)
+            if Common.UNK in original_name or Common.UNK in predicted:
+                print("------------------------------\n")
         return true_positive, false_positive, false_negative
 
     def print_hyperparams(self):
