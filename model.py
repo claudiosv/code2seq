@@ -1130,8 +1130,8 @@ class Model:
             # )   
             print("Per pred: True pos: {}, False pos: {}, False neg: {}".format(pred_true_pos,pred_false_pos,pred_false_neg))
             # print("Precision: {}, Recall: {}, F1: {}".format(precision,recall,f1))
-            if(self.evaluation_counter > 100):
-                exit(1)
+            # if(self.evaluation_counter > 100):
+            #     exit(1)
             print("------------------------------\n")
         return true_positive, false_positive, false_negative
 
