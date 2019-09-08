@@ -1117,20 +1117,32 @@ class Model:
         self, results, true_positive, false_positive, false_negative
     ):
         for original_name, predicted in results:
-            original_subtokens = original_name.split(Common.internal_delimiter)
+            filtered_predicted_names = Common.filter_impossible_names_u(predicted)
+            filtered_original_subtokens = Common.filter_impossible_names_u(
+                original_name.split(Common.internal_delimiter)
+            )
             
-            if not Common.UNK in original_subtokens and not Common.UNK in predicted and "".join(predicted) == "".join(original_subtokens):
-                true_positive += len(original_subtokens)
+            if not Common.UNK in filtered_original_subtokens and not Common.UNK in filtered_predicted_names and "".join(filtered_predicted_names) == "".join(filtered_original_subtokens):
+                true_positive += len(filtered_original_subtokens)
                 continue
 
-            for subtok in predicted:
-                if subtok in original_subtokens and subtok != Common.UNK:
+            for subtok in filtered_predicted_names:
+                if subtok == Common.UNK:
+                    false_positive += 1
+                    # print("UNK found in prediction!: ", "|".join(filtered_predicted_names))
+                    continue
+                if subtok in filtered_original_subtokens and subtok != Common.UNK:
                     true_positive += 1
                 else:
                     false_positive += 1
-            for subtok in original_subtokens:
-                if not subtok in predicted and subtok != Common.UNK:
+            for subtok in filtered_original_subtokens:
+                if subtok == Common.UNK:
+                    # print("UNK found in original: ", "|".join(filtered_original_subtokens))
                     false_negative += 1
+                    continue
+                if not subtok in filtered_predicted_names and subtok != Common.UNK:
+                    false_negative += 1
+
         return true_positive, false_positive, false_negative
 
     def update_per_subtoken_statistics_gamma(

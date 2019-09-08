@@ -13,20 +13,20 @@ cd ~/code2seq/
 source ~/anaconda3/etc/profile.d/conda.sh
 conda activate tf_test_old
 
+
 config=configs/java-small-high-maxparts.json
 model=java-small-nocase-10k
-model_iter=10 # TODO
+model_iter=16
 dataset=java-small-nocase-10k
 python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
 python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
 
 model=java-small-nocase-5k #no case
-model_iter=13 #TODO!!
+model_iter=13
 dataset=java-small-nocase-5k
 python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
 python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
 
-# config=configs/java-small-high-maxparts.json
 model=java-small-nocase-2k
 model_iter=24
 dataset=java-small-nocase-2k
@@ -54,17 +54,36 @@ python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_
 model=java-small-case-2k
 model_iter=9
 dataset=java-small-case-2k
-config=configs/java-small-high-maxparts.json
 python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
 python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
 
-# model=java-small-case-1k #1k case
-# model_iter=0 #TODO
-# dataset=java-small-case-1k
-# python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
-# python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
+model=java-small-case-1k
+model_iter=11
+dataset=java-small-case-1k
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
+
+model=java-small-nocase-10k-split
+model_iter=12
+dataset=java-small-nocase-10k-split
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
+
+config=configs/java-med-high-maxparts-large.json
+model=java-med-nocase-10k-split-lv
+model_iter=23
+dataset=java-med-nocase-10k-split
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
 
 # ------ END BPE SECTION ------
+
+config=configs/java-med.json
+model=java-med-baseline
+model_iter=31
+dataset=java-med
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
+python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
 
 config=configs/java-small-gru-new.json
 model=java-small-gru-new

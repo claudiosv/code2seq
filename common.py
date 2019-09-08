@@ -72,8 +72,17 @@ class Common:
         return not name in [Common.UNK, Common.PAD, Common.EOS]
 
     @staticmethod
+    def legal_method_names_checker_u(name):
+        return not name in [Common.PAD, Common.EOS]
+
+    @staticmethod
     def filter_impossible_names(top_words):
         result = list(filter(Common.legal_method_names_checker, top_words))
+        return result
+
+    @staticmethod
+    def filter_impossible_names_u(top_words):
+        result = list(filter(Common.legal_method_names_checker_u, top_words))
         return result
 
     @staticmethod
