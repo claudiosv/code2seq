@@ -10,6 +10,7 @@ from tensorflow.contrib.memory_stats.python.ops.memory_stats_ops import BytesInU
 from tensorflow.contrib.memory_stats.python.ops.memory_stats_ops import BytesLimit
 import reader
 from common import Common
+import re
 
 
 class Model:
@@ -24,7 +25,7 @@ class Model:
             api_key="wRZBv07osQnjYfhIUGphpKpxH",
             project_name="code2seq",
             workspace="cspiess",
-            disabled=False
+            disabled=True
         )
         self.evaluation_counter = 0
         self.config = config
@@ -945,18 +946,17 @@ class Model:
         model_dirname = os.path.dirname(
             self.config.SAVE_PATH if self.config.SAVE_PATH else self.config.LOAD_PATH
         )
-        ref_file_name = model_dirname + "/ref.txt"
-        predicted_file_name = model_dirname + "/pred.txt"
+
         if not os.path.exists(model_dirname):
             os.makedirs(model_dirname)
 
-        with open(model_dirname + "/log.txt", "w") as output_file, open(
-            ref_file_name, "w"
-        ) as ref_file, open(predicted_file_name, "w") as pred_file:
+        with open(model_dirname + "/log.txt", "w") as output_file:
             num_correct_predictions = 0
             total_predictions = 0
             total_prediction_batches = 0
-            true_positive, false_positive, false_negative = 0, 0, 0
+            true_positive_a, false_positive_a, false_negative_a = 0, 0, 0
+            true_positive_b, false_positive_b, false_negative_b = 0, 0, 0
+            true_positive_g, false_positive_g, false_negative_g = 0, 0, 0
             self.eval_queue.reset(self.sess)
             start_time = time.time()
 
@@ -969,65 +969,41 @@ class Model:
                             self.eval_topk_values,
                         ]
                     )
-                    true_target_strings = Common.binary_to_string_list(
-                        true_target_strings
-                    )
-                    ref_file.write(
-                        "\n".join(
-                            [
-                                name.replace(Common.internal_delimiter, " ")
-                                for name in true_target_strings
-                            ]
-                        )
-                        + "\n"
-                    )
-                    if self.config.BEAM_WIDTH > 0:
-                        # predicted indices: (batch, time, beam_width)
-                        predicted_strings = [
-                            [
-                                [self.index_to_target[i] for i in timestep]
-                                for timestep in example
-                            ]
-                            for example in predicted_indices
-                        ]
-                        predicted_strings = [
-                            list(map(list, zip(*example)))
-                            for example in predicted_strings
-                        ]  # (batch, top-k, target_length)
-                        pred_file.write(
-                            "\n".join(
-                                [
-                                    " ".join(Common.filter_impossible_names(words))
-                                    for words in predicted_strings[0]
-                                ]
-                            )
-                            + "\n"
-                        )
-                    else:
-                        predicted_strings = [
-                            [self.index_to_target[i] for i in example]
-                            for example in predicted_indices
-                        ]
-                        pred_file.write(
-                            "\n".join(
-                                [
-                                    " ".join(Common.filter_impossible_names(words))
-                                    for words in predicted_strings
-                                ]
-                            )
-                            + "\n"
-                        )
+                    true_target_strings = Common.binary_to_string_list(true_target_strings)
+                   
+                    predicted_strings = [
+                        [self.index_to_target[i] for i in example]
+                        for example in predicted_indices
+                    ]
 
                     num_correct_predictions = self.update_correct_predictions(
                         num_correct_predictions,
                         output_file,
                         zip(true_target_strings, predicted_strings),
                     )
-                    true_positive, false_positive, false_negative = self.update_per_subtoken_statistics(
+
+                    #Alpha
+                    true_positive_a, false_positive_a, false_negative_a = self.update_per_subtoken_statistics(
                         zip(true_target_strings, predicted_strings),
-                        true_positive,
-                        false_positive,
-                        false_negative,
+                        true_positive_a,
+                        false_positive_a,
+                        false_negative_a,
+                    )
+
+                    #Beta
+                    true_positive_b, false_positive_b, false_negative_b = self.update_per_subtoken_statistics_beta(
+                        zip(true_target_strings, predicted_strings),
+                        true_positive_b,
+                        false_positive_b,
+                        false_negative_b,
+                    )
+
+                    #Gamma
+                    true_positive_g, false_positive_g, false_negative_g = self.update_per_subtoken_statistics_gamma(
+                        zip(true_target_strings, predicted_strings),
+                        true_positive_g,
+                        false_positive_g,
+                        false_negative_g,
                     )
 
                     total_predictions += len(true_target_strings)
@@ -1045,22 +1021,27 @@ class Model:
 
             print("Done testing, epoch reached")
             output_file.write(str(num_correct_predictions / total_predictions) + "\n")
-            # Common.compute_bleu(ref_file_name, predicted_file_name)
 
         elapsed = int(time.time() - eval_start_time)
-        precision, recall, f1 = self.calculate_results(
-            true_positive, false_positive, false_negative
+        precision_a, recall_a, f1_a = self.calculate_results(
+            true_positive_a, false_positive_a, false_negative_a
+        )
+        precision_b, recall_b, f1_b = self.calculate_results(
+            true_positive_b, false_positive_b, false_negative_b
+        )
+        precision_g, recall_g, f1_g = self.calculate_results(
+            true_positive_g, false_positive_g, false_negative_g
         )
         print(
             "Evaluation time: %sh%sm%ss"
             % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60)
         )
-        return num_correct_predictions / total_predictions, precision, recall, f1
+        return num_correct_predictions / total_predictions, precision_a, recall_a, f1_a, precision_b, recall_b, f1_b, precision_g, recall_g, f1_g
 
     def update_correct_predictions(self, num_correct_predictions, output_file, results):
         for original_name, predicted in results:
-            if self.config.BEAM_WIDTH > 0:
-                predicted = predicted[0]
+            # if self.config.BEAM_WIDTH > 0:
+            #     predicted = predicted[0]
             original_name_parts = original_name.split(Common.internal_delimiter)
             filtered_original = Common.filter_impossible_names(original_name_parts)
             filtered_predicted_parts = Common.filter_impossible_names(predicted)
@@ -1086,16 +1067,10 @@ class Model:
         self, results, true_positive, false_positive, false_negative
     ):
         for original_name, predicted in results:
-            if self.config.BEAM_WIDTH > 0:
-                predicted = predicted[0]
-            if self.config.PENALIZE_UNK:
-                filtered_predicted_names = predicted
-                filtered_original_subtokens = original_name.split(Common.internal_delimiter)
-            else:
-                filtered_predicted_names = Common.filter_impossible_names(predicted)
-                filtered_original_subtokens = Common.filter_impossible_names(
-                    original_name.split(Common.internal_delimiter)
-                )
+            filtered_predicted_names = Common.filter_impossible_names(predicted)
+            filtered_original_subtokens = Common.filter_impossible_names(
+                original_name.split(Common.internal_delimiter)
+            )
             # if Common.UNK in original_name or Common.UNK in predicted:   
             #     print("Original name: ", original_name)
             #     print("Predicted: ", predicted)
@@ -1103,14 +1078,14 @@ class Model:
             #     print("Filtered predicted name: ", filtered_predicted_names)
             #     self.evaluation_counter += 1
             
-            pred_true_pos = 0
-            pred_false_pos = 0
-            pred_false_neg = 0
+            # pred_true_pos = 0
+            # pred_false_pos = 0
+            # pred_false_neg = 0
             if "".join(filtered_original_subtokens) == "".join(
                 filtered_predicted_names
             ):
                 true_positive += len(filtered_original_subtokens)
-                pred_true_pos += len(filtered_original_subtokens)
+                # pred_true_pos += len(filtered_original_subtokens)
                 # if Common.UNK in original_name or Common.UNK in predicted:
                 #     print("Perfect! True positive: ", len(filtered_original_subtokens))
                 continue
@@ -1118,14 +1093,14 @@ class Model:
             for subtok in filtered_predicted_names:
                 if subtok in filtered_original_subtokens:
                     true_positive += 1
-                    pred_true_pos += 1
+                    # pred_true_pos += 1
                 else:
                     false_positive += 1
-                    pred_false_pos += 1
+                    # pred_false_pos += 1
             for subtok in filtered_original_subtokens:
                 if not subtok in filtered_predicted_names:
                     false_negative += 1
-                    pred_false_neg += 1
+                    # pred_false_neg += 1
             # precision, recall, f1 = self.calculate_results(
             # true_positive, false_positive, false_negative
             # )   
@@ -1137,6 +1112,55 @@ class Model:
             # if Common.UNK in original_name or Common.UNK in predicted:
             #     print("------------------------------\n")
         return true_positive, false_positive, false_negative
+
+    def update_per_subtoken_statistics_beta(
+        self, results, true_positive, false_positive, false_negative
+    ):
+        for original_name, predicted in results:
+            original_subtokens = original_name.split(Common.internal_delimiter)
+            
+            if not Common.UNK in original_subtokens and not Common.UNK in predicted and "".join(predicted) == "".join(original_subtokens):
+                true_positive += len(original_subtokens)
+                continue
+
+            for subtok in predicted:
+                if subtok in original_subtokens and subtok != Common.UNK:
+                    true_positive += 1
+                else:
+                    false_positive += 1
+            for subtok in original_subtokens:
+                if not subtok in predicted and subtok != Common.UNK:
+                    false_negative += 1
+        return true_positive, false_positive, false_negative
+
+    def update_per_subtoken_statistics_gamma(
+        self, results, true_positive, false_positive, false_negative
+    ):
+        for original_name, predicted in results:
+            filtered_predicted_names = Common.filter_impossible_names(predicted)
+            filtered_original_subtokens = Common.filter_impossible_names(
+                original_name.split(Common.internal_delimiter)
+            )
+            filtered_original_subtokens = "".join(filtered_original_subtokens)
+            filtered_predicted_names = "".join(filtered_predicted_names)
+            
+            filtered_original_subtokens = re.split("(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\\s+", filtered_original_subtokens)
+            filtered_predicted_names = re.split("(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\\s+", filtered_predicted_names)
+            
+            if "".join(filtered_original_subtokens) == "".join(filtered_predicted_names):
+                true_positive += len(filtered_original_subtokens)
+                continue
+
+            for subtok in filtered_predicted_names:
+                if subtok in filtered_original_subtokens:
+                    true_positive += 1
+                else:
+                    false_positive += 1
+            for subtok in filtered_original_subtokens:
+                if not subtok in filtered_predicted_names:
+                    false_negative += 1
+        return true_positive, false_positive, false_negative
+
 
     def print_hyperparams(self):
         print("Training batch size:\t\t\t", self.config.BATCH_SIZE)

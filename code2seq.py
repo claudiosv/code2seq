@@ -75,15 +75,35 @@ if __name__ == "__main__":
     if config.TRAIN_PATH:
         model.train()
     if config.TEST_PATH and not args.data_path:
-        results, precision, recall, f1 = model.evaluate()
+        
+        results, precision_a, recall_a, f1_a, precision_b, recall_b, f1_b, precision_g, recall_g, f1_g = model.evaluate()
+        print("Dataset: " + config.TEST_PATH)
+        print("Config: " + args.config_path)
+        print("Model: " + args.load_path)
         print("Accuracy: " + str(results))
         print(
-            "Precision: "
-            + str(precision)
+            "Alpha Precision: "
+            + str(precision_a)
             + ", recall: "
-            + str(recall)
+            + str(recall_a)
             + ", F1: "
-            + str(f1)
+            + str(f1_a)
+        )
+        print(
+            "Beta Precision: "
+            + str(precision_b)
+            + ", recall: "
+            + str(recall_b)
+            + ", F1: "
+            + str(f1_b)
+        )
+        print(
+            "Gamma Precision: "
+            + str(precision_g)
+            + ", recall: "
+            + str(recall_g)
+            + ", F1: "
+            + str(f1_g)
         )
     if args.predict:
         predictor = InteractivePredictor(config, model)
