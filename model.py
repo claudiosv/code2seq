@@ -1156,9 +1156,14 @@ class Model:
             filtered_original_subtokens = "".join(filtered_original_subtokens)
             filtered_predicted_names = "".join(filtered_predicted_names)
             
-            filtered_original_subtokens = re.split("(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\\s+", filtered_original_subtokens)
-            filtered_predicted_names = re.split("(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\\s+", filtered_predicted_names)
-            
+            try:
+                filtered_original_subtokens = re.split("(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\\s+", filtered_original_subtokens)
+                filtered_predicted_names = re.split("(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\\s+", filtered_predicted_names)
+            except:
+                print("Error splitting by regex")
+                filtered_predicted_names = Common.filter_impossible_names(predicted)
+                filtered_original_subtokens = Common.filter_impossible_names(original_name.split(Common.internal_delimiter))
+
             if "".join(filtered_original_subtokens) == "".join(filtered_predicted_names):
                 true_positive += len(filtered_original_subtokens)
                 continue
