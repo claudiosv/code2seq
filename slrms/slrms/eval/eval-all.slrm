@@ -16,7 +16,7 @@ conda activate tf_test_old
 
 config=configs/java-small-high-maxparts.json
 model=java-small-nocase-10k
-model_iter=16
+model_iter=10
 dataset=java-small-nocase-10k
 python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.test.c2s > evals/${model}_test_log.txt
 python3 code2seq.py --config ${config} --load models/${model}/model_iter${model_iter} --test data/${dataset}/${dataset}.val.c2s > evals/${model}_val_log.txt
