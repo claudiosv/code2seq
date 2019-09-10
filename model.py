@@ -25,7 +25,7 @@ class Model:
             api_key="wRZBv07osQnjYfhIUGphpKpxH",
             project_name="code2seq",
             workspace="cspiess",
-            disabled=True
+            disabled=False
         )
         self.evaluation_counter = 0
         self.config = config
@@ -198,7 +198,7 @@ class Model:
             except tf.errors.OutOfRangeError:
                 self.epochs_trained += self.config.SAVE_EVERY_EPOCHS
                 print("Finished %d epochs" % self.config.SAVE_EVERY_EPOCHS)
-                results, precision, recall, f1 = self.evaluate()
+                results, precision, recall, f1, _, _, _, _, _, _ = self.evaluate()
                 print("Epochs trained: %.5f" % self.epochs_trained)
                 print("Accuracy after %d epochs: %.5f" % (self.epochs_trained, results))
                 print(
